@@ -63,3 +63,23 @@
   - Web programmers oath
   - Utilization of Large language models
   - Exercises 1.6.-1.14.
+
+**PART 02**
+
+- Rendering a collection, modules
+
+  - [Visual Studio Code snippets](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets)
+  - JavaScript Arrays (find, filter, and map)
+    [- Higher-order functions](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84)
+    - Map
+    - Reduce basics
+  - [Event Handlers Revisited](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#event-handling-revisited)
+  - Rendering Collections
+  - Key-attribute
+  - Map
+  - Anti-pattern: [Array Indexes as Keys](https://robinpokorny.medium.com/index-as-a-key-is-an-anti-pattern-e0349aece318)
+  - Refactoring Modules
+    [- importing modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
+  - When the Application Breaks
+  - Web developer's oath
+  - Exercises 2.1.-2.5.
