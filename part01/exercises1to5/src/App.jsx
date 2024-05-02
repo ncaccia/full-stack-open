@@ -1,26 +1,26 @@
-const Header = (props) => {
+const Header = ({ course }) => {
   // console.log(props);
   return (
     <div>
-      <h1>{props.course}</h1>
+      <h1>{course}</h1>
     </div>
   );
 }
 
-const Content = (props) => {
+const Content = ({ parts }) => {
   // console.log(props.parts);
   return (
     <div>
-      {props.parts.map((part, i) => (
+      {parts.map((part, i) => (
         <p key={i}>{part.name}: {part.exercises} exercises </p>
       ))}
     </div>
   );
 }
 
-const Total = (props) => {
+const Total = ({ parts }) => {
   // console.log(props.parts);
-  const totalExercises = props.parts.reduce((accumulator, currentPart) => {
+  const totalExercises = parts.reduce((accumulator, currentPart) => {
     return accumulator + currentPart.exercises
   }, 0)
   return (
@@ -64,4 +64,5 @@ const App = () => {
   )
 }
 
-export default App
+export default App;
+
