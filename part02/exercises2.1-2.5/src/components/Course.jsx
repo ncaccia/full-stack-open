@@ -2,8 +2,8 @@ import Header from "./Header";
 import Content from "./Content";
 import Total from "./Total";
 
-const Course = ({ course }) => {
-    const { name, parts } = course
+const Course = ({ courses }) => {
+    const { name, parts } = courses;
     return (
         <div>
             <Header course={name} />
