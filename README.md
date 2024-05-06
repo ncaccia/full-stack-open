@@ -27,7 +27,6 @@
   - Possible error message
   - Some notes
   - Do not render objects
-  - Exercises 1.1.-1.2.
 - JavaScript
   - Variables
   - Arrays
@@ -62,12 +61,10 @@
   - Useful Reading
   - Web programmers oath
   - Utilization of Large language models
-  - Exercises 1.6.-1.14.
 
 **PART 02**
 
 - Rendering a collection, modules
-
   - [Visual Studio Code snippets](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets)
   - JavaScript Arrays (find, filter, and map)
     [- Higher-order functions](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84)
@@ -82,4 +79,17 @@
     [- importing modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
   - When the Application Breaks
   - Web developer's oath
-  - Exercises 2.1.-2.5.
+- Forms
+  - Saving the notes in the component state
+  - [Controlled component](https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable)
+  - Filtering Displayed Elements
+    - [array.filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+    - [Check Object Equality in JavaScript](https://www.joshbritz.co/posts/why-its-so-hard-to-check-object-equality/)
+      - [Lodash library for comparisons](https://lodash.com/docs/4.17.15#isEqual))
+- Getting data from server
+  - The browser as a runtime environment
+    - [JSON server](https://github.com/typicode/json-server)
+  - npm
+  - Axios and promises
+  - Effect-hooks
+  - The development runtime environment
