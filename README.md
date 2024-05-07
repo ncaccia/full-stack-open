@@ -87,9 +87,19 @@
     - [Check Object Equality in JavaScript](https://www.joshbritz.co/posts/why-its-so-hard-to-check-object-equality/)
       - [Lodash library for comparisons](https://lodash.com/docs/4.17.15#isEqual))
 - Getting data from server
+  -
   - The browser as a runtime environment
     - [JSON server](https://github.com/typicode/json-server)
+      - install the package: `npm install json-server --save-dev`
+      - Make an addition to the scripts part of the package.json file:`"server": "json-server -p3001 --watch db.json"`
+    - [ IO operations (input/output)](https://en.wikipedia.org/wiki/Input/output)
+    - [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
   - npm
-  - Axios and promises
-  - Effect-hooks
+    - Runtime Dependency: A runtime dependency is a package that is required for your application to run correctly in a production environment -> 'npm install <package-name> '
+    - Development Dependency:  is only needed during the development process, but not during the actual runtime of your application -> 'npm install <package-name> --save-dev'
+    - [fetch()](https://developer.mozilla.org/en-US/docs/Web/API/fetch)
+  - [Axios and promises](https://github.com/axios/axios)
+    - [Axios' method get returns a promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
+  - [Effect-hooks](https://react.dev/reference/react/hooks#effect-hooks)
+    - By default, effects run after every completed render, but you can choose to fire it only when certain values have changed.
   - The development runtime environment
