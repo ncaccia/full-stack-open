@@ -1,6 +1,6 @@
-**PART 00**
+## PART 00
 
-- Fundamentals of Web apps
+- #### Fundamentals of Web apps
   - HTTP GET
   - Traditional web applications
   - Running application logic in the browser
@@ -16,9 +16,9 @@
   - Full-stack web development
   - JavaScript fatigue [link](https://auth0.com/blog/how-to-manage-javascript-fatigue/)
 
-**PART 01**
+## PART 01
 
-- Introduction to React
+- #### Introduction to React
   - create-react-app
   - Component
   - JSX
@@ -27,7 +27,7 @@
   - Possible error message
   - Some notes
   - Do not render objects
-- JavaScript
+- #### JavaScript
   - Variables
   - Arrays
   - Objects
@@ -36,7 +36,7 @@
   - Object methods and "this"
   - Classes
   - JavaScript materials
-- Component state, event handlers
+- #### Component state, event handlers
   - Component helper functions
   - Destructuring
   - Page re-rendering
@@ -46,7 +46,7 @@
   - Passing state - to child components
   - Changes in state cause re-rendering
   - Refactoring the components
-- A more complex state, debugging React apps
+- #### A more complex state, debugging React apps
   - Complex state
   - Handling arrays
   - Update of the state is asynchronous
@@ -62,9 +62,9 @@
   - Web programmers oath
   - Utilization of Large language models
 
-**PART 02**
+## PART 02
 
-- Rendering a collection, modules
+- #### Rendering a collection, modules
   - [Visual Studio Code snippets](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets)
   - JavaScript Arrays (find, filter, and map)
     [- Higher-order functions](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84)
@@ -79,14 +79,14 @@
     [- importing modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
   - When the Application Breaks
   - Web developer's oath
-- Forms
+- #### Forms
   - Saving the notes in the component state
   - [Controlled component](https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable)
   - Filtering Displayed Elements
     - [array.filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
     - [Check Object Equality in JavaScript](https://www.joshbritz.co/posts/why-its-so-hard-to-check-object-equality/)
       - [Lodash library for comparisons](https://lodash.com/docs/4.17.15#isEqual))
-- Getting data from server
+- #### Getting data from server
   - The browser as a runtime environment
     - [JSON server](https://github.com/typicode/json-server)
       - install the package: `npm install json-server --save-dev`
@@ -102,7 +102,7 @@
   - [Effect-hooks](https://react.dev/reference/react/hooks#effect-hooks)
     - By default, effects run after every completed render, but you can choose to fire it only when certain values have changed.
   - The development runtime environment
-- Altering data in server
+- #### Altering data in server
   - [REST](https://en.wikipedia.org/wiki/REST)
     - [HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
   - Sending Data to the Server
@@ -114,3 +114,13 @@
   - Cleaner Syntax for Defining Object Literals
     - [Promises chaining](https://javascript.info/promise-chaining)
   - Promises and Errors
+- #### Adding styles to React app
+  - Improved error message
+    - [CSS selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors)
+    - [CSS preprocessor](https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor)
+      - Old school CSS = single file without using a CSS preprocessor
+      - Tailwind CSS use [PostCSS](https://postcss.org/) as preprocessor
+  - [Inline styles](https://react-cn.github.io/react/tips/inline-styles.html)
+    -  limitations: [pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) can't be used straightforwardly.
+  - Couple of important remarks
+  

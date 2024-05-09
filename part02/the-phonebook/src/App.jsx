@@ -47,8 +47,8 @@ const ContactList = ({ states, deletePerson }) => {
     ));
 
   const RenderPerson = (person) => (
-    <li key={person.id} onClick={() => deletePerson(person.id, person.name)}>
-      <p>{person.name} - phone: {person.phone}<button>Delete</button></p>
+    <li key={person.id}>
+      <p>{person.name} - phone: {person.phone}<button onClick={() => deletePerson(person.id, person.name)}>Delete</button></p>
     </li>
   );
 
@@ -72,11 +72,56 @@ const ContactList = ({ states, deletePerson }) => {
   );
 }
 
+const Notification = ({ notification }) => {
+  const { type, message } = notification;
+  const errorStyle = {
+    color: 'red',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  };
+  const successStyle = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  };
+
+  if (message === null) {
+    return null
+  }
+
+  if (type === "success") {
+    return (
+      <div
+        style={successStyle}
+      >
+        {message}
+      </div>
+    )
+  } else {
+    return (
+      <div
+        style={errorStyle}
+      >
+        {message}
+      </div>
+    )
+  }
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [filter, setFilter] = useState('');
+  const [notification, setNotification] = useState({ type: "success", message: null })
 
   useEffect(() => {
     personService
@@ -98,13 +143,19 @@ const App = () => {
     setNewPhone(e.target.value);
   }
 
+  const notificationMessage = (type, message) => {
+    setNotification({ type, message });
+    setTimeout(() => {
+      setNotification({ type: null, message: null });
+    }, 2000);
+  }
+
   const addPerson = (e) => {
     e.preventDefault();
     const newPerson = {
       name: newName,
       phone: newPhone,
     };
-
     const foundPerson = persons.find(p => p.name.toLowerCase() === newName.toLowerCase());
     const isPhoneDuplicated = persons.some(p => p.phone === newPhone);
 
@@ -125,9 +176,15 @@ const App = () => {
             ));
             setNewName('');
             setNewPhone('');
-            return;
+            console.log("running update notification....");
+            notificationMessage("success", `${newPerson.name} successfully updated in the phonebook`)
           })
-          .catch(err => console.error("Error updating person:", err));
+          .catch(err => {
+            console.error("Error updating person:", err.message);
+            console.log("running update error notification....");
+            notificationMessage("error", `Alert!! ${foundPerson.name} has already been deleted from the phonebook`);
+            setPersons(persons.filter(p => p.id !== foundPerson.id))
+          });
       } else {
         return;
       }
@@ -138,8 +195,13 @@ const App = () => {
           setPersons(persons.concat(newPerson));
           setNewName('');
           setNewPhone('');
+          console.log("running update notification....");
+          notificationMessage("success", `${newPerson.name} successfully added to the phonebook`)
         })
-        .catch(err => console.error("Error creating person:", err));
+        .catch(() => {
+          notificationMessage("error", `Alert!! ${foundPerson.name} has already been deleted from the phonebook`);
+          setPersons(persons.filter(p => p.id !== foundPerson.id))
+        });
     }
   }
 
@@ -149,13 +211,18 @@ const App = () => {
         .destroy(id)
         .then(() => {
           setPersons(persons.filter(p => p.id !== id))
+          notificationMessage("success", `${name} successfully deleted from the phonebook`)
         })
+        .catch(err =>
+          notificationMessage("error", `Error deleting person. Error: ${err.message}`)
+        )
     }
   }
 
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification notification={notification} />
       <Filter
         filterInput={filterInput}
         filter={filter}
