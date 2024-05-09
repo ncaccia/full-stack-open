@@ -87,7 +87,6 @@
     - [Check Object Equality in JavaScript](https://www.joshbritz.co/posts/why-its-so-hard-to-check-object-equality/)
       - [Lodash library for comparisons](https://lodash.com/docs/4.17.15#isEqual))
 - Getting data from server
-  -
   - The browser as a runtime environment
     - [JSON server](https://github.com/typicode/json-server)
       - install the package: `npm install json-server --save-dev`
@@ -96,10 +95,22 @@
     - [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
   - npm
     - Runtime Dependency: A runtime dependency is a package that is required for your application to run correctly in a production environment -> 'npm install <package-name> '
-    - Development Dependency:  is only needed during the development process, but not during the actual runtime of your application -> 'npm install <package-name> --save-dev'
+    - Development Dependency: is only needed during the development process, but not during the actual runtime of your application -> 'npm install <package-name> --save-dev'
     - [fetch()](https://developer.mozilla.org/en-US/docs/Web/API/fetch)
   - [Axios and promises](https://github.com/axios/axios)
     - [Axios' method get returns a promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
   - [Effect-hooks](https://react.dev/reference/react/hooks#effect-hooks)
     - By default, effects run after every completed render, but you can choose to fire it only when certain values have changed.
   - The development runtime environment
+- Altering data in server
+  - [REST](https://en.wikipedia.org/wiki/REST)
+    - [HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+  - Sending Data to the Server
+    - REST terminology, individual data objects === resources
+  - Changing the Importance of Notes
+  - Extracting Communication with the Backend ito a Separate Module
+    - [Single-responsibility principle:](https://en.wikipedia.org/wiki/Single-responsibility_principle) "A module should be responsible to one, and only one, actor."
+    - src/services directory
+  - Cleaner Syntax for Defining Object Literals
+    - [Promises chaining](https://javascript.info/promise-chaining)
+  - Promises and Errors

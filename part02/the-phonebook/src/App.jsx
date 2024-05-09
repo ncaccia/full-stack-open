@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios';
+import personService from './services/persons'
 
 // Search filter component
 const Filter = ({ filterInput, filter }) => {
@@ -36,26 +36,37 @@ const AddPerson = ({ states, functions }) => {
   );
 }
 
+
+
 // Show contacts in list component
-const ContactList = ({ states }) => {
+const ContactList = ({ states, deletePerson }) => {
   const [persons, filter] = states;
+
   const filteredPersons = persons.filter(person =>
     person.name.toLocaleLowerCase().includes(filter.toLowerCase()
     ));
+
+  const RenderPerson = (person) => (
+    <li key={person.id} onClick={() => deletePerson(person.id, person.name)}>
+      <p>{person.name} - phone: {person.phone}<button>Delete</button></p>
+    </li>
+  );
+
+  const RenderList = () => {
+    if (filter.length === 0) {
+      return persons.map(RenderPerson);
+    } else if (filteredPersons.length > 0) {
+      return filteredPersons.map(RenderPerson);
+    } else {
+      return <p>No matches were found</p>;
+    }
+  };
 
   return (
     <div>
       <h2>Contacts Numbers</h2>
       <ul>
-        {filter.length === 0 ? (
-          persons.map((person) =>
-            <li key={person.id}>{person.name} - phone: {person.phone}</li>)
-        ) : (filteredPersons.length > 0 ? (
-          filteredPersons.map((person) => <li key={person.id}>{person.name} - phone: {person.phone}</li>
-          )) : (
-          <p>No matchs where found</p>
-        ))
-        }
+        <RenderList />
       </ul>
     </div>
   );
@@ -68,15 +79,12 @@ const App = () => {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    console.log('Effect...');
-    axios
-      .get('http://localhost:3001/persons')
-      .then(promise => {
-        console.log('promise completed');
-        setPersons(promise.data)
+    personService
+      .getAll()
+      .then(initialData => {
+        setPersons(initialData)
       })
   }, []);
-  console.log(`Phonebook contacts count = ${persons.length}`);
 
   const filterInput = (e) => {
     setFilter(e.target.value);
@@ -92,20 +100,57 @@ const App = () => {
 
   const addPerson = (e) => {
     e.preventDefault();
-    const isDuplicated = persons.some(person => person.name.toLowerCase() === newName.toLowerCase() || person.phone === newPhone);
-    if (isDuplicated) {
-      alert(`${newName} or ${newPhone} is already added to the phonebook, try another name and phone combination please`);
-      return;
-    }
     const newPerson = {
       name: newName,
       phone: newPhone,
-      id: `${newName}-${newPhone}`,
     };
-    setPersons(prevState => [...prevState, newPerson])
-    // Alternative: setPersons(persons.concat(newObj));
-    setNewName('');
-    setNewPhone('');
+
+    const foundPerson = persons.find(p => p.name.toLowerCase() === newName.toLowerCase());
+    const isPhoneDuplicated = persons.some(p => p.phone === newPhone);
+
+    if (isPhoneDuplicated) {
+      alert(`${newPhone} is already added to the phonebook, try another phone combination or edit the contact please`);
+      return;
+    }
+
+    if (foundPerson) {
+      const shouldReplace = window.confirm(`${foundPerson.name} already exist in the phonebook. Shall we replace the old number with the new one?`)
+
+      if (shouldReplace) {
+        personService
+          .update(foundPerson.id, { ...foundPerson, phone: newPerson.phone })
+          .then(updatedPerson => {
+            setPersons(prevPersons => prevPersons.map(p =>
+              p.id === foundPerson.id ? { ...p, phone: updatedPerson.phone } : p
+            ));
+            setNewName('');
+            setNewPhone('');
+            return;
+          })
+          .catch(err => console.error("Error updating person:", err));
+      } else {
+        return;
+      }
+    } else {
+      personService
+        .create(newPerson)
+        .then(newPerson => {
+          setPersons(persons.concat(newPerson));
+          setNewName('');
+          setNewPhone('');
+        })
+        .catch(err => console.error("Error creating person:", err));
+    }
+  }
+
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Do you really want to delete ${name}`)) {
+      personService
+        .destroy(id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+    }
   }
 
   return (
@@ -119,7 +164,11 @@ const App = () => {
         states={[newName, newPhone]}
         functions={[addPerson, nameInput, phoneInput]}
       />
-      <ContactList states={[persons, filter]} />
+      <ContactList
+        states={[persons, filter]}
+        deletePerson={deletePerson}
+
+      />
     </div>
   )
 }
