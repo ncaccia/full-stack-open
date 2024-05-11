@@ -100,7 +100,9 @@
   - [Axios and promises](https://github.com/axios/axios)
     - [Axios' method get returns a promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
   - [Effect-hooks](https://react.dev/reference/react/hooks#effect-hooks)
+    - [Video deeply explained](https://www.youtube.com/watch?v=3Wb9l18KoxI)
     - By default, effects run after every completed render, but you can choose to fire it only when certain values have changed.
+    - [Important: React Lifecycle of a Functional Component](https://www.youtube.com/watch?v=Zz9pLellSQA)
   - The development runtime environment
 - #### Altering data in server
   - [REST](https://en.wikipedia.org/wiki/REST)
@@ -123,4 +125,18 @@
   - [Inline styles](https://react-cn.github.io/react/tips/inline-styles.html)
     -  limitations: [pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) can't be used straightforwardly.
   - Couple of important remarks
+    - we can not call method map of the value null = warning with initial null / server errors cases.
+    - the initialization of the state "masked" the problem that is caused by the fact that the data is not yet fetched from the backend.
+    - conditional rendering => return null if the component state is not properly initialized:
+      - cases where it is impossible to define the state so that the initial rendering is possible.
+    - [ Vite Enviromental variables](https://vitejs.dev/guide/env-and-mode.html) to save keys
+      - [Vite .env video tutorial](https://www.youtube.com/watch?v=jqCjflIGH1o)
+    - Important extra learnings from working with APIs
+      - You can get blocked by accidently looping in excess!!
+        - To prevent it, use a **debounce** technique: limit the rate at which a function is executed. Triggering Events --> Delay --> Resetting the Delay --> Executing the Function
+        - [Debounce and throttle](https://www.youtube.com/watch?v=cjIswDCKgu0)
+
+
+
+
   

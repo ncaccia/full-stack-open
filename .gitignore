@@ -32,6 +32,10 @@ node_modules/
 *.sql
 *.sqlite
 
+# Enviroment variables #
+######################
+.env
+
 # OS generated files #
 ######################
 .DS_Store
