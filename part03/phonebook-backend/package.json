@@ -1,0 +1,19 @@
+{
+  "name": "phonebook-backend",
+  "version": "0.0.1",
+  "description": "FullStack Exercises 3.1. to 3.10. ",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

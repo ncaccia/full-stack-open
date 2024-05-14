@@ -27,6 +27,7 @@
   - Possible error message
   - Some notes
   - Do not render objects
+  - Vite --> `create vite@latest -- --template react.`
 - #### JavaScript
   - Variables
   - Arrays
@@ -123,7 +124,7 @@
       - Old school CSS = single file without using a CSS preprocessor
       - Tailwind CSS use [PostCSS](https://postcss.org/) as preprocessor
   - [Inline styles](https://react-cn.github.io/react/tips/inline-styles.html)
-    -  limitations: [pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) can't be used straightforwardly.
+    - limitations: [pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) can't be used straightforwardly.
   - Couple of important remarks
     - we can not call method map of the value null = warning with initial null / server errors cases.
     - the initialization of the state "masked" the problem that is caused by the fact that the data is not yet fetched from the backend.
@@ -136,7 +137,48 @@
         - To prevent it, use a **debounce** technique: limit the rate at which a function is executed. Triggering Events --> Delay --> Resetting the Delay --> Executing the Function
         - [Debounce and throttle](https://www.youtube.com/watch?v=cjIswDCKgu0)
 
+## Part 03
+
+- Node.js and Express
+  - Node
+    - versioning model used in npm = [semantic versioning.](https://docs.npmjs.com/about-semantic-versioning)
+      - If the major number of a dependency does not change, then the newer versions should be backwards compatible. This means that if our application happened to use version 4.99.175 of Express in the future, then all the code implemented in this part would still have to work without making changes to the code. In contrast, the future 5.0.0 version of Express may contain changes that would cause our application to no longer work.
+    - updating Node using [Node Version Manager](https://github.com/nvm-sh/nvm) (nvm) - Check the available Node.js versions `nvm ls-remote` -> `nvm install <version>`
+    - you can switch to the newly installed version with: `nvm use <version>` --> `nvm alias default <version>` To set a default Node.js version to be used across terminal sessions.
+    - **Package.json file** defines commonly used npm scripts:
+      - start": "node index.js" --> we can ran `npm start` now to start the server
+      - "test": "echo \"Error: no test specified\" && exit 1" --> we need to add testing library.
+    - `const http = require('http')` --> application imports Node's built-in web server module.
+    - `createServer()` method of the http module to create a new web server
+  - Express
+    - [transitive dependencies](https://lexi-lambda.github.io/blog/2016/08/24/understanding-the-npm-dependency-model/)
+      - import express (is a function)
+      - define routes to the application
+        - define event handler HTTP requests
+        - Express automatically sets the Content-Type header
+      - [nodemon](https://github.com/remy/nodemon) to easy restart the server `npm install --save-dev nodemon` --> install it as a Dev dependency
+  - REST -> Representational State Transfer
+    - how RESTful APIs are typically understood in web applications. REST refers to as a uniform interface, which means a consistent way of defining interfaces that makes it possible for systems to cooperate.
+      - Singular things (like notes) are called **resources** in RESTful thinking. Every resource has an associated URL which is the **resource's unique address**.
+        - One convention for creating unique addresses is to combine the name of the resource type with the resource's unique identifier.
+        - We can execute different operations on resources. The operation to be executed is defined by the HTTP verb.
+        URL       | verb    | functionality
+        notes/10  | GET     | fetches a single resource
+        notes     | GET     | fetches all resources in the collection
+        notes     | POST    | creates a new resource based on the request data
+        notes/10  | DELETE  | removes the identified resource
+        notes/10  | PUT     | replaces the entire identified resource with the request data
+        notes/10  | PATCH   | replaces a part of the identified resource with the request data
+        - [Route params](http://expressjs.com/en/guide/routing.html#route-parameters) --> using the colon syntax`:`
+        - for bar request, we can add special methods to the response:
+          - [.status(400)](https://expressjs.com/en/4x/api.html#res.status) => Sets the HTTP status for the response
+          - [.end()](https://expressjs.com/en/4x/api.html#res.end) => Ends the response process.
+    - [The Visual Studio Code REST client](https://github.com/Huachao/vscode-restclient/blob/master/README.md#usage)
+      - 1. make a directory at the root of the application named requests.
+      - 2. create a new get_all_notes.rest file and define the request that fetches all notes.
+        - Add multiple requests in the same file using ### separators between requests.
+  - Receiving data
+    - HTTP POST request to the address with the request body in JSON format.
+      - To access the data easily, we need the help of the Express [json-parser](https://expressjs.com/en/api.html) that we can use with the command `app.use(express.json())`. Without the json-parser, the body property would be undefined. The json-parser takes the JSON data of a request, transforms it into a JavaScript object and then attaches it to the body property of the request object before the route handler is called.
 
 
-
-  
