@@ -162,13 +162,13 @@
       - Singular things (like notes) are called **resources** in RESTful thinking. Every resource has an associated URL which is the **resource's unique address**.
         - One convention for creating unique addresses is to combine the name of the resource type with the resource's unique identifier.
         - We can execute different operations on resources. The operation to be executed is defined by the HTTP verb.
-        URL       | verb    | functionality
-        notes/10  | GET     | fetches a single resource
-        notes     | GET     | fetches all resources in the collection
-        notes     | POST    | creates a new resource based on the request data
-        notes/10  | DELETE  | removes the identified resource
-        notes/10  | PUT     | replaces the entire identified resource with the request data
-        notes/10  | PATCH   | replaces a part of the identified resource with the request data
+          URL | verb | functionality
+          notes/10 | GET | fetches a single resource
+          notes | GET | fetches all resources in the collection
+          notes | POST | creates a new resource based on the request data
+          notes/10 | DELETE | removes the identified resource
+          notes/10 | PUT | replaces the entire identified resource with the request data
+          notes/10 | PATCH | replaces a part of the identified resource with the request data
         - [Route params](http://expressjs.com/en/guide/routing.html#route-parameters) --> using the colon syntax`:`
         - for bar request, we can add special methods to the response:
           - [.status(400)](https://expressjs.com/en/4x/api.html#res.status) => Sets the HTTP status for the response
@@ -180,5 +180,16 @@
   - Receiving data
     - HTTP POST request to the address with the request body in JSON format.
       - To access the data easily, we need the help of the Express [json-parser](https://expressjs.com/en/api.html) that we can use with the command `app.use(express.json())`. Without the json-parser, the body property would be undefined. The json-parser takes the JSON data of a request, transforms it into a JavaScript object and then attaches it to the body property of the request object before the route handler is called.
-
-
+      - JavaScript objects cannot be directly passed through HTTP requests without being converted into a format that can be transmitted over the network, such as a JSON string
+        -  HTTP is a text-based protocol, meaning it can only transmit text data. 
+        -  
+  - About HTTP request types
+    - **Safety**: GET and HEAD methods SHOULD NOT have the significance of taking an action other than retrieval. The executing request must not cause any side effects on the server. By side effects, we mean that the state of the database must not change as a result of the request, and the response must only return data that already exists on the server.
+    - **Idempotency**: All HTTP requests except POST should be idempotent:
+    - _POST is the only HTTP request type that is neither safe nor idempotent._ If we send 5 different HTTP POST requests to /api/notes with a body of {content: "many same", important: true}, the resulting 5 notes on the server will all have the same content.
+  - Middleware
+    - Functions that can be used for handling request and response objects.
+    - In practice, you can use several middlewares at the same time. When you have more than one, they're executed one by one in the order that they were listed in the application code.
+    - Middleware is used like this: `app.use(requestLogger)`
+      - Middleware functions have to be used before routes when we want them to be executed by the route event handlers. Sometimes, we want to use middleware functions after routes. We do this when the middleware functions are only called if no route handler processes the HTTP request.
+    - [Morgan](https://github.com/expressjs/morgan) npm package: HTTP request logger middleware for node.js

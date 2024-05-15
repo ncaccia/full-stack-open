@@ -1,7 +1,18 @@
+const morgan = require('morgan');
 const express = require('express');
 const app = express();
 
 app.use(express.json())
+
+// middleware to logging the request body
+morgan.token('reqBody', (req) => {
+    if (req.method === 'POST' || req.method === 'PUT') {
+        return JSON.stringify(req.body);
+    }
+    return '';
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :reqBody'))
+
 
 let personsData = [
     {
