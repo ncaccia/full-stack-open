@@ -20,7 +20,7 @@ let personsData = [
         "name": "Arto Hellas",
         "number": "040-123456"
     },
-    {
+    { 
         "id": 2,
         "name": "Ada Lovelace",
         "number": "39-44-5323523"

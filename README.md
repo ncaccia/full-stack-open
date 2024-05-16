@@ -139,7 +139,7 @@
 
 ## Part 03
 
-- Node.js and Express
+- #### Node.js and Express
   - Node
     - versioning model used in npm = [semantic versioning.](https://docs.npmjs.com/about-semantic-versioning)
       - If the major number of a dependency does not change, then the newer versions should be backwards compatible. This means that if our application happened to use version 4.99.175 of Express in the future, then all the code implemented in this part would still have to work without making changes to the code. In contrast, the future 5.0.0 version of Express may contain changes that would cause our application to no longer work.
@@ -181,8 +181,8 @@
     - HTTP POST request to the address with the request body in JSON format.
       - To access the data easily, we need the help of the Express [json-parser](https://expressjs.com/en/api.html) that we can use with the command `app.use(express.json())`. Without the json-parser, the body property would be undefined. The json-parser takes the JSON data of a request, transforms it into a JavaScript object and then attaches it to the body property of the request object before the route handler is called.
       - JavaScript objects cannot be directly passed through HTTP requests without being converted into a format that can be transmitted over the network, such as a JSON string
-        -  HTTP is a text-based protocol, meaning it can only transmit text data. 
-        -  
+        - HTTP is a text-based protocol, meaning it can only transmit text data.
+        -
   - About HTTP request types
     - **Safety**: GET and HEAD methods SHOULD NOT have the significance of taking an action other than retrieval. The executing request must not cause any side effects on the server. By side effects, we mean that the state of the database must not change as a result of the request, and the response must only return data that already exists on the server.
     - **Idempotency**: All HTTP requests except POST should be idempotent:
@@ -193,3 +193,36 @@
     - Middleware is used like this: `app.use(requestLogger)`
       - Middleware functions have to be used before routes when we want them to be executed by the route event handlers. Sometimes, we want to use middleware functions after routes. We do this when the middleware functions are only called if no route handler processes the HTTP request.
     - [Morgan](https://github.com/expressjs/morgan) npm package: HTTP request logger middleware for node.js
+- #### Deploying app to internet
+
+  - [Same origin policy and CORS](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy)
+    - not specific to React or Node. They are universal principles regarding the safe operation of web applications
+    - Origin policy:
+      - URL's origin is defined by the combination of **protocol** (AKA scheme), **hostname**, and **port**.
+      ```
+      http://example.com:80/index.html
+      protocol: http
+      host: example.com
+      port: 80
+      ```
+      - if the resource is fetched using a URL that doesn't share the same origin(scheme, host, port) as the source HTML, the browser will have to check the `Access-Control-Allow-origin ` response header. If it contains \* on the URL of the source HTML, the browser will process the response, otherwise the browser will refuse to process it and throws an error.
+      - The same-origin policy is a security mechanism implemented by browsers in order to prevent session hijacking among other security vulnerabilities
+    - [Cross-Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
+      - install cors package --> `npm install cors`
+  - Application to the Internet (deploying)
+    - Free tier options
+      - [Fly.io](https://fly.io/) or [Render](https://render.com)
+      - Port used in [enviroment variables](https://en.wikipedia.org/wiki/Environment_variable):
+            ```
+            const PORT = process.env.PORT || 3001
+            app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`)
+            })
+            ```
+      - 
+  - Frontend production build
+  - Serving static files from the backend
+  - The whole app to the internet
+  - Streamlining deploying of the frontend
+  - Proxy
+  - Exercises 3.9.-3.11
