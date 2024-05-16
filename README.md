@@ -210,19 +210,89 @@
     - [Cross-Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
       - install cors package --> `npm install cors`
   - Application to the Internet (deploying)
-    - Free tier options
+    - Side lessons:
+      - [git submodule](https://cristianowerneraraujo.medium.com/why-when-and-how-to-use-git-submodules-1a72615de453) = Git repository nested inside another. Useful when you want to include the contents of one Git repository within another Git repository.
+        - **STEPS**
+          1. Navigate to the Main Project's Directory
+          2. Add the Submodule: `git submodule add <repository_URL> <submodule path>`
+          3. Commit the Changes and then push them
+    - PaaS or Servers as Plataforms free tier options
       - [Fly.io](https://fly.io/) or [Render](https://render.com)
       - Port used in [enviroment variables](https://en.wikipedia.org/wiki/Environment_variable):
-            ```
-            const PORT = process.env.PORT || 3001
-            app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`)
-            })
-            ```
-      - 
+        ``   const PORT = process.env.PORT || 3001
+ app.listen(PORT, () => {
+ console.log(`Server running on port ${PORT}`)
+ })``
   - Frontend production build
+    - In development mode the application is configured to give clear error messages, immediately render code changes to the browser, and so on.
+    - deployed == create a [Vite production build](https://vitejs.dev/guide/build.html) or a version of the application that is optimized for production. ` npm run build.`
+      - This creates a directory called dist which contains the only HTML file of our application (index.html) and the directory assets. [Minified](<https://en.wikipedia.org/wiki/Minification_(programming)>) version of our application's JavaScript code will be generated in the dist directory
   - Serving static files from the backend
+    - Running like a **single-page app** option:
+      - both the **frontend** and the **backend** are at the same address, we can declare baseUrl as a [relative URL](https://www.w3.org/TR/WD-html40-970917/htmlweb.html#h-5.1.2). This means we can leave out the part declaring the server. Example: `const baseUrl = '/api/notes'`
+      - Create a **production build** of the App and copy the production **dist directory** to the root of the backend repository and configure the backend to show the frontend's main page (the file dist/index.html) as its main page. `cp -r dist ../backend`
+      - Make **Express** show static content, the page index.html and the JavaScript, etc., it fetches, we need a **built-in middleware** from Express called [static](https://expressjs.com/en/starter/static-files.html). `app.use(express.static('dist'))`
+      - The application can now be used from the backend address http://localhost:3001
+        - When we use a browser to go to the address http://localhost:3001, the server returns the index.html file from the dist directory. The file contains instructions to fetch a CSS stylesheet defining the styles of the application, and one script tag that instructs the browser to fetch the JavaScript code of the application - the actual React application.
+          **- Important** Unlike when running the app in a development environment, everything is now in the same node/express-backend that runs in localhost:3001. When the browser goes to the page, the file index.html is rendered. That causes the browser to fetch the production version of the React app. Once it starts to run, it fetches the json-data from the address localhost:3001/api/notes.
   - The whole app to the internet
+    - The node/express-backend now resides in the Fly.io/Render server. When the root address is accessed, the browser loads and executes the React app that fetches the json-data from the Fly.io/Render server.
+      ![alt text](assets/image.png)
   - Streamlining deploying of the frontend
-  - Proxy
-  - Exercises 3.9.-3.11
+    - Script to create a new production build of the frontend (custom script on the **backend package.json**)
+      - render.com
+        ```
+        {
+          "scripts": {
+            //...
+            "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
+            "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+          }
+        }
+        ```
+        - `npm run build:ui` = builds the frontend and copies the production version under the backend repository.
+        - `npm run deploy:full` = contains also the necessary git commands to update the backend repository.
+  - Vite [Proxy](https://vitejs.dev/config/server-options.html#server-proxy)
+    If the React code does an HTTP request that are made to paths starting with what we define(in our case '/api') to a server address at http://localhost:5173 not managed by the React application itself (i.e. when requests are not about fetching the CSS or JavaScript of the application), the request will be redirected to the server at http://localhost:3001.
+
+    - Due to changing the backend address to a relative URL, the connection to the backend does not work.
+
+      - In development mode the frontend is at the address localhost:5173, the requests to the backend go to the wrong address localhost:5173/api/notes. The backend is at localhost:3001.
+
+        - Vite let's us fix this through vite.config.js file of the frontend repository.
+        - Previous code:
+
+        ```
+        import { defineConfig } from 'vite'
+        import react from '@vitejs/plugin-react'
+
+        // https://vitejs.dev/config/
+        export default defineConfig({
+          plugins: [react()],
+        })
+        ```
+
+        - New code
+
+        ```
+        import { defineConfig } from 'vite'
+        import react from '@vitejs/plugin-react'
+
+        // https://vitejs.dev/config/
+        export default defineConfig({
+          plugins: [react()],
+          // Added for reparing the relative url issue after deploying
+          server: {
+            proxy: {
+              '/api': {
+                target: 'http://localhost:3001',
+                changeOrigin: true,
+              },
+            }
+          },
+        })
+        ```
+
+    - **Negative aspect**: complicated it is to deploy the frontend. Deploying a new version requires generating a new production build of the frontend and copying it to the backend repository. This makes creating an automated [deployment pipeline](https://martinfowler.com/bliki/DeploymentPipeline.html) more difficult.
+
+  - Learnings from Exercises 3.9.-3.11
