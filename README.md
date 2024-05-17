@@ -1,3 +1,5 @@
+## Notes from the Helsinski Full Stack Open course
+
 ## PART 00
 
 - #### Fundamentals of Web apps
@@ -209,6 +211,8 @@
       - The same-origin policy is a security mechanism implemented by browsers in order to prevent session hijacking among other security vulnerabilities
     - [Cross-Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
       - install cors package --> `npm install cors`
+      - require it on the backend index.js `const cors = require('cors');`
+        - add a middleware to enable it: `app.use(cors());`
   - Application to the Internet (deploying)
     - Side lessons:
       - [git submodule](https://cristianowerneraraujo.medium.com/why-when-and-how-to-use-git-submodules-1a72615de453) = Git repository nested inside another. Useful when you want to include the contents of one Git repository within another Git repository.
@@ -219,10 +223,12 @@
     - PaaS or Servers as Plataforms free tier options
       - [Fly.io](https://fly.io/) or [Render](https://render.com)
       - Port used in [enviroment variables](https://en.wikipedia.org/wiki/Environment_variable):
-        ``   const PORT = process.env.PORT || 3001
- app.listen(PORT, () => {
- console.log(`Server running on port ${PORT}`)
- })``
+        ```
+        const PORT = process.env.PORT || 3001
+        app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`)
+        })
+        ```
   - Frontend production build
     - In development mode the application is configured to give clear error messages, immediately render code changes to the browser, and so on.
     - deployed == create a [Vite production build](https://vitejs.dev/guide/build.html) or a version of the application that is optimized for production. ` npm run build.`
