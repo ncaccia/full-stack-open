@@ -195,11 +195,13 @@
     - Middleware is used like this: `app.use(requestLogger)`
       - Middleware functions have to be used before routes when we want them to be executed by the route event handlers. Sometimes, we want to use middleware functions after routes. We do this when the middleware functions are only called if no route handler processes the HTTP request.
     - [Morgan](https://github.com/expressjs/morgan) npm package: HTTP request logger middleware for node.js
+
 - #### Deploying app to internet
 
-  - [Same origin policy and CORS](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy)
-    - not specific to React or Node. They are universal principles regarding the safe operation of web applications
-    - Origin policy:
+  - A. [Same origin policy and CORS](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy)
+    - Universal principles regarding the safe operation of web applications (not specific to React or Node)
+    - Origin policy un a nutshell:
+      - The same-origin policy is a security mechanism implemented by browsers in order to prevent session hijacking among other security vulnerabilities
       - URL's origin is defined by the combination of **protocol** (AKA scheme), **hostname**, and **port**.
       ```
       http://example.com:80/index.html
@@ -207,31 +209,31 @@
       host: example.com
       port: 80
       ```
-      - if the resource is fetched using a URL that doesn't share the same origin(scheme, host, port) as the source HTML, the browser will have to check the `Access-Control-Allow-origin ` response header. If it contains \* on the URL of the source HTML, the browser will process the response, otherwise the browser will refuse to process it and throws an error.
-      - The same-origin policy is a security mechanism implemented by browsers in order to prevent session hijacking among other security vulnerabilities
-    - [Cross-Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
+      - If the resource is fetched using a URL that doesn't share the same origin(scheme, host, port) as the source HTML, the browser will have to check the `Access-Control-Allow-origin` response header. If it contains \* on the URL of the source HTML, the browser will process the response, otherwise the browser will refuse to process it and throws an error.
+    - Solution: [Cross-Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
       - install cors package --> `npm install cors`
       - require it on the backend index.js `const cors = require('cors');`
         - add a middleware to enable it: `app.use(cors());`
-  - Application to the Internet (deploying)
+  
+  - B.  Deploying Application to the Internet
     - Side lessons:
-      - [git submodule](https://cristianowerneraraujo.medium.com/why-when-and-how-to-use-git-submodules-1a72615de453) = Git repository nested inside another. Useful when you want to include the contents of one Git repository within another Git repository.
+      - Problems with repos inside repos -> [git submodule](https://cristianowerneraraujo.medium.com/why-when-and-how-to-use-git-submodules-1a72615de453) = Git repository nested inside another. Useful when you want to include the contents of one Git repository within another Git repository.
         - **STEPS**
           1. Navigate to the Main Project's Directory
           2. Add the Submodule: `git submodule add <repository_URL> <submodule path>`
           3. Commit the Changes and then push them
-    - PaaS or Servers as Plataforms free tier options
+    - For small projects, we can use PaaS (Servers as Plataforms) free tier options
       - [Fly.io](https://fly.io/) or [Render](https://render.com)
-      - Port used in [enviroment variables](https://en.wikipedia.org/wiki/Environment_variable):
+      - Adjust Port used to [enviroment variables](https://en.wikipedia.org/wiki/Environment_variable):
         ```
         const PORT = process.env.PORT || 3001
         app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`)
         })
         ```
-  - Frontend production build
+  - C.  Frontend production build
     - In development mode the application is configured to give clear error messages, immediately render code changes to the browser, and so on.
-    - deployed == create a [Vite production build](https://vitejs.dev/guide/build.html) or a version of the application that is optimized for production. ` npm run build.`
+    - deployed = create a [Vite production build](https://vitejs.dev/guide/build.html) or a version of the application that is optimized for production. ` npm run build.`
       - This creates a directory called dist which contains the only HTML file of our application (index.html) and the directory assets. [Minified](<https://en.wikipedia.org/wiki/Minification_(programming)>) version of our application's JavaScript code will be generated in the dist directory
   - Serving static files from the backend
     - Running like a **single-page app** option:
@@ -258,7 +260,7 @@
         ```
         - `npm run build:ui` = builds the frontend and copies the production version under the backend repository.
         - `npm run deploy:full` = contains also the necessary git commands to update the backend repository.
-  - Vite [Proxy](https://vitejs.dev/config/server-options.html#server-proxy)
+  - D. Vite [Proxy](https://vitejs.dev/config/server-options.html#server-proxy)
     If the React code does an HTTP request that are made to paths starting with what we define(in our case '/api') to a server address at http://localhost:5173 not managed by the React application itself (i.e. when requests are not about fetching the CSS or JavaScript of the application), the request will be redirected to the server at http://localhost:3001.
 
     - Due to changing the backend address to a relative URL, the connection to the backend does not work.
@@ -301,4 +303,23 @@
 
     - **Negative aspect**: complicated it is to deploy the frontend. Deploying a new version requires generating a new production build of the frontend and copying it to the backend repository. This makes creating an automated [deployment pipeline](https://martinfowler.com/bliki/DeploymentPipeline.html) more difficult.
 
-  - Learnings from Exercises 3.9.-3.11
+- #### Saving data to MongoDB
+  
+  - Debugging Node applications
+  - MongoDB
+  - Schema
+  - Creating and saving objects
+  - Fetching objects from the database
+  - Exercise 3.12.
+  - Connecting the backend to a database
+  - Moving db configuration to its own module
+  - Important note to Fly.io users
+  - Using database in route handlers
+  - Verifying frontend and backend integration
+  - Exercises 3.13.-3.14.
+  - Error handling
+  - Moving error handling into middleware
+  - The order of middleware loading
+  - Other operations
+  - A true full stack developer's oath
+  - Exercises 3.15.-3.18.
