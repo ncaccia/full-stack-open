@@ -1,3 +1,13 @@
+# The full stack developer's oath
+
+1. I will have my browser developer console open all the time
+2. I will use the network tab of the browser dev tools to ensure that frontend and backend are communicating as I expect
+3. I will constantly keep an eye on the state of the server to make sure that the data sent there by the frontend is saved there as I expect
+4. I will keep an eye on the database: does the backend save data there in the right format
+5. I progress with small steps
+6. I will write lots of console.log statements to make sure I understand how the code behaves and to help pinpoint problems
+7. If my code does not work, I will not write more code. Instead, I start deleting the code until it works or just return to a state when everything was still working
+
 ## Notes from the Helsinski Full Stack Open course
 
 ## PART 00
@@ -142,6 +152,7 @@
 ## Part 03
 
 - #### Node.js and Express
+
   - Node
     - versioning model used in npm = [semantic versioning.](https://docs.npmjs.com/about-semantic-versioning)
       - If the major number of a dependency does not change, then the newer versions should be backwards compatible. This means that if our application happened to use version 4.99.175 of Express in the future, then all the code implemented in this part would still have to work without making changes to the code. In contrast, the future 5.0.0 version of Express may contain changes that would cause our application to no longer work.
@@ -158,6 +169,10 @@
       - define routes to the application
         - define event handler HTTP requests
         - Express automatically sets the Content-Type header
+        - In an Express.js application, the `app._router.stack` property is a part of the internal implementation of the Express router. It is essentially an array that contains all the middleware and route handlers that have been registered on the application instance.
+          - When you define routes using methods like app.get(), app.post(), etc., Express registers these routes as layers in the \_router.stack
+          - Nested Routers: If you use express.Router(), the nested routers are also included in the \_router.stack as middleware.
+        - `console.log(app._router.stack);`
       - [nodemon](https://github.com/remy/nodemon) to easy restart the server `npm install --save-dev nodemon` --> install it as a Dev dependency
   - REST -> Representational State Transfer
     - how RESTful APIs are typically understood in web applications. REST refers to as a uniform interface, which means a consistent way of defining interfaces that makes it possible for systems to cooperate.
@@ -169,8 +184,8 @@
           notes | GET | fetches all resources in the collection
           notes | POST | creates a new resource based on the request data
           notes/10 | DELETE | removes the identified resource
-          notes/10 | PUT | replaces the entire identified resource with the request data
-          notes/10 | PATCH | replaces a part of the identified resource with the request data
+          notes/10 | PUT | modifies a record's information and creates a new record if one is not available.
+          notes/10 | PATCH | updates a resource without sending the entire body in the request.
         - [Route params](http://expressjs.com/en/guide/routing.html#route-parameters) --> using the colon syntax`:`
         - for bar request, we can add special methods to the response:
           - [.status(400)](https://expressjs.com/en/4x/api.html#res.status) => Sets the HTTP status for the response
@@ -199,6 +214,7 @@
 - #### Deploying app to internet
 
   - A. [Same origin policy and CORS](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy)
+
     - Universal principles regarding the safe operation of web applications (not specific to React or Node)
     - Origin policy un a nutshell:
       - The same-origin policy is a security mechanism implemented by browsers in order to prevent session hijacking among other security vulnerabilities
@@ -214,8 +230,8 @@
       - install cors package --> `npm install cors`
       - require it on the backend index.js `const cors = require('cors');`
         - add a middleware to enable it: `app.use(cors());`
-  
-  - B.  Deploying Application to the Internet
+
+  - B. Deploying Application to the Internet
     - Side lessons:
       - Problems with repos inside repos -> [git submodule](https://cristianowerneraraujo.medium.com/why-when-and-how-to-use-git-submodules-1a72615de453) = Git repository nested inside another. Useful when you want to include the contents of one Git repository within another Git repository.
         - **STEPS**
@@ -231,7 +247,7 @@
         console.log(`Server running on port ${PORT}`)
         })
         ```
-  - C.  Frontend production build
+  - C. Frontend production build
     - In development mode the application is configured to give clear error messages, immediately render code changes to the browser, and so on.
     - deployed = create a [Vite production build](https://vitejs.dev/guide/build.html) or a version of the application that is optimized for production. ` npm run build.`
       - This creates a directory called dist which contains the only HTML file of our application (index.html) and the directory assets. [Minified](<https://en.wikipedia.org/wiki/Minification_(programming)>) version of our application's JavaScript code will be generated in the dist directory
@@ -304,22 +320,377 @@
     - **Negative aspect**: complicated it is to deploy the frontend. Deploying a new version requires generating a new production build of the frontend and copying it to the backend repository. This makes creating an automated [deployment pipeline](https://martinfowler.com/bliki/DeploymentPipeline.html) more difficult.
 
 - #### Saving data to MongoDB
-  
+
   - Debugging Node applications
-  - MongoDB
-  - Schema
-  - Creating and saving objects
+    - Read more:
+      - [JS debugging beyond console.log](https://swizec.com/blog/javascript-debugging-slightly-beyond-consolelog/)
+      - [I am a puts debuggerer](https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html)
+    - Visual studio steps to debug [(video tutorial)](https://www.youtube.com/watch?v=4Z8CM-E-HRE)
+      - Option A = adding --inspect to node server
+        - open a termina inside VSC and initiate terminal on the bar: `> create new terminal`
+        - start the server with `node --inspect index.js`
+        - open de debuger on the bar: `> debug:attach node process`
+        - pick the process running on the server (web socket url)
+        - add breakpoints using F9 to pause each line of code (replace manuals console.log())
+      - Option B = adding `--inspect-brk` this starts whern I open the debug tab, and goes one line by line, no breakpoints
+      - Option C = add debugging to chrome
+        - adding `--inspect` to node server
+        - open browser chrome//inspect
+        - click on the inspect tag we can also pass the `--inspect` flag to `nodemon --inspect index.js`
+      - **Important**
+        - [Jidoka principle](https://leanscape.io/principles-of-lean-13-jidoka/) (stop and fix)
+          - When bugs occur, the worst of all possible strategies is to continue writing code. It will guarantee that your code will soon have even more bugs.
+  - MongoDB [(document database)](https://en.wikipedia.org/wiki/Document-oriented_database)
+    - [NoSQL](https://en.wikipedia.org/wiki/NoSQL) umbrella
+      - Organized in [Collections](https://www.mongodb.com/docs/manual/core/databases-and-collections/) (Similar to tab les in SQL db)
+      - Each resource is a [Documents](https://www.mongodb.com/docs/manual/core/document/)
+        - Size Limit: The maximum BSON document size is 16 megabytes.
+        - Document Field Order: Unlike JavaScript objects, the fields in a BSON document are ordered.
+    - Mongo database services -> [MongoDB Atlas.](https://www.mongodb.com/products/platform/atlas-database)
+      - Cluster0 is free forever to practice
+      - whitelist my IP to enter the DB to gain access
+      - Connect the data
+        - Select the driver method (node.js)
+        - install [Mongoose](http://mongoosejs.com/index.html) in our notes project backend: it is a library that offers a higher-level API. = **Object document mapper (ODM)**
+        - <!-- - First install the MongoDB `npm install mongodb` -->
+        - get the MongoDB URI = address to the database. The address looks like this:
+        ```
+        mongodb+srv://fullstack:thepasswordishere@cluster0.o1opl.mongodb.net/?retryWrites=true&w=majority
+        ```
+  - [Schema with mongoose](https://mongoosejs.com/docs/guide.html)
+    - After connecting the backend to the db:
+      - Define schema for the document and a [matching model](https://mongoosejs.com/docs/models.html)
+        - Schema -> tells mongoose how the objects are to be stored in the database.
+        - Model -> the first "resource" parameter is the singular name of the model.
+          - The name of the collection will be the lowercase plural, Mongoose convention is to automatically name collections as the plural (e.g. notes) when the schema refers to them in the singular (e.g. Note). For example: Person -> people, Car -> cars, Mouse -> mice
+        - The idea behind Mongoose is that the data stored in the database is given a schema at the level of the application that defines the shape of the documents stored in any given collection.
+          - Document databases like Mongo are **schemaless**, meaning that the database itself does not care about the structure of the data that is stored in the database.
+  - Creating and saving objects - We use the constructor function `const note = new Note({...})` - Saving -> When the object is saved to the database, the event handler provided to `then` gets called.
+    `   note.save().then(result => {
+  console.log('note saved!')
+  mongoose.connection.close()
+})` - If the connection is not closed, the program will never finish its execution. - Strict mode: By default, Mongoose operates in strict mode for queries, meaning it will ignore any fields in the query object that are not defined in the schema. This catch errors where you might have misspelled a field name or are querying with a field that doesn't exist in your schema. - To dissable it -> `mongoose.set('strictQuery', false)`
   - Fetching objects from the database
-  - Exercise 3.12.
-  - Connecting the backend to a database
+    - [Mongo search query syntax.](https://docs.mongodb.com/manual/reference/operator/)
+    - The objects are retrieved from the database with the [find method ](https://mongoosejs.com/docs/api/model.html#model_Model-find)of the Note model.
+    - The parameter of the method is an object expressing search conditions -> {} = empty object = get all notes stored.
+  - Learnings from Exercise 3.12.
+
+    - We can get the command-line parameters from the process.argv variable.
+    - Using **.then()** versus **async/await** for asynchronous functions
+
+      - matter of personal preference and style
+
+      ```
+      mongoose.connect(url)
+      .then(() => {
+          console.log('Connected to MongoDB');
+      })
+      .catch((error) => {
+          console.error('Error connecting to MongoDB:', error);
+      });
+
+      ```
+
+      ```
+      async function connectToMongoDB() {
+          try {
+              await mongoose.connect(url);
+              console.log('Connected to MongoDB');
+          } catch (error) {
+              console.error('Error connecting to MongoDB:', error);
+          }
+      }
+      connectToMongoDB();
+      ```
+
+  - **Connecting the backend to a database**
+
+    - The frontend assumes that every object has a unique id in the id field
+    - Output 'id' instead of MongoDB '\_id': even though the \_id property of Mongoose objects looks like a string, it is in fact an object. The **toJSON** method we defined transforms it into a string just to be safe
+
+      - One way to format the objects returned by Mongoose is to modify the **toJSON method** of the schema, which is used on all instances of the models produced with that schema.
+      - Using the [transform function](https://mongoosejs.com/docs/api/document.html#transform)
+
+        - **doc or document** The mongoose document which is being converted
+        - **ret or returnedObject** The plain object representation which has been converted
+        - options The options in use (either schema options or the options passed inline)
+          ```
+          noteSchema.set('toJSON', {
+              transform: (document, returnedObject) => {
+                returnedObject.id = returnedObject._id.toString()
+                delete returnedObject._id
+                delete returnedObject.__v
+              }
+            })
+          ```
+        - Another way would be Using 'virtuals': essentially fake fields that Mongoose creates. They're not stored in the DB, they just get populated at run time:
+
+          ```
+            // Duplicate the ID field.
+            Schema.virtual('id').get(function(){
+                return this._id.toHexString();
+            });
+
+            // Ensure virtual fields are serialised.
+            Schema.set('toJSON', {
+                virtuals: true
+            });
+          ```
+
   - Moving db configuration to its own module
-  - Important note to Fly.io users
+
+    - Mongoose-specific code into its own module:
+      - new `models` directory -> add each model-schema
+      - Defining **Node** module -> public interface of the module is defined by setting a value to the module.exports variable
+        - things defined inside of the module, like the variables mongoose and url will not be accessible or visible to users of the module.
+      - Require it on the index -> `const ModelName = require('./models/modelName');`
+        - assigned to the same object that the module defines.
+        - DON'T hardcode url address into the code. Passed it as an **environment variable**. There are many ways to define the value of an environment variable:
+          - Define it when the application is started: `MONGODB_URI=address_here npm run dev`
+          - Using the [dotenv](https://github.com/motdotla/dotenv#readme) library.
+            - loading environment variables from a .env file into process.env in Node.js applications. We create a **.env** file at the root of the project. The environment variables are defined inside of the file.
+            - Add `require('dotenv').config()` into the index.js
+        - Note: dotenv vs Vite's VITE\_ functionality
+          - Use **dotenv**
+            - By: requiring it on the index.js `require('dotenv').config()` AND passing them with `process.env`.
+            - You are working on a Node.js project that does not use Vite.
+            - You need a simple and portable way to manage environment variables across different types of projects.
+            - You want to use environment variables in both server-side and client-side code.
+          - Use **Vite's VITE\_** functionality
+            - By: adding `VITE_` to each .env variable AND importing then with `import.meta.env`
+            - You are working on a Vite-based project.
+            - You want the benefits of Vite's optimizations and automatic loading of environment variables.
+            - You prefer to keep your configuration within the conventions provided by Vite for consistency and ease of use.
+    - Important note on deployment: remember to waitlist your IPs === Security!
+
   - Using database in route handlers
+
+    - **POST / Create resource**:
+      - The `resourceName` object is created with the `ResourceName` constructor function. The response is sent inside of the callback function for the save operation. This ensures that the response is sent only if the operation succeeded (Consider error handling).
+      - The `savedResourceName` parameter in the callback function is the saved and newly created `resourceName`. The data sent back in the response is the formatted version created automatically with the toJSON method: `res.json(savedResourceName)`
+    - **DELETE or PUT / find resource by Id**:
+      - Fetch individual resource by using the method `findById`
+
   - Verifying frontend and backend integration
-  - Exercises 3.13.-3.14.
+
+    - backend gets expanded, good practice to **test all the request** (Postman or the VS Code REST client)
+    - Only after every route has been verified to work in the backend, start testing that the frontend works with the backend.
+
+  - Learnings from Exercises 3.13.-3.14.
+
+    - Mongoose `.exe()` to [handle promises](https://mongoosejs.com/docs/promises.html) -> Mongoose queries are NOT promisses.
+    - findOne() + regular expressions (RegExp) are powerfull to find duplicates:
+      ```
+      app.post('/api/people', (req, res) => {
+      const regex = new RegExp(req.body.name, 'i');
+      Person.findOne({ name: { $regex: regex } }).exec()
+          .then(result => {
+              if (!result) {
+                  const person = new Person({
+                      name: req.body.name,
+                      phone: req.body.phone,
+                  })
+                  person.save().then((savedPerson) => {
+                      res.json(savedPerson);
+                  })
+              } else {
+                  return res.status(409).json({
+                      error: 'Conflict: The name already exists in the phonebook'
+                  })
+              }
+          });
+      })
+      ```
+
   - Error handling
+
+    - Avoid db chrashes that stop the server -> **always give a respond to a request**
+    - catch method
+      - capture `null` values === 404 status ()
+      - caputre promise rejections === 500 status (internal server error)
+      - capture diferent type of data on the request error (CastError: Cast to ObjectId failed for value "anyValue" (type string) at path "\_id" for model "AnyModel")
+    - Add as much feedback to user as posible on the error response:
+      ```
+      .catch(err => {
+            console.log(err);
+            res.status(400).send({ error: 'malformetted id' });
+        })
+      ```
+    - When dealing with Promises, it's almost always a good idea to add error and exception handling. Otherwise, you will find yourself dealing with strange bugs.
+
   - Moving error handling into middleware
-  - The order of middleware loading
-  - Other operations
-  - A true full stack developer's oath
-  - Exercises 3.15.-3.18.
+
+    - Using [Express Error Handlers](https://expressjs.com/en/guide/error-handling.html). middleware that are defined with a function that accepts four parameters.
+
+      - `errorHandler = (error, request, response, next)`
+
+        ```
+        const errorHandler = (err, req, res, next) => {
+          console.error(err.message)
+
+          if (err.name === 'Any type of error') {
+            return res.status(error code).send({ error: 'feedback we want to give' })
+            }
+
+            next(err)
+        }
+        ```
+
+      - **Important!** The middleware has to be the last loaded one, also all the routes should be registered before this!
+
+    - Cases where it is better to implement all error handling in a single place. Useful if we want to report data related to errors to an external error-tracking system
+      - [Sentry](https://sentry.io/welcome/) Tool free-tier: Error Monitoring and Tracing / Alerts and notifications via email
+    - Steps:
+      - The next function is passed to the handler as param.
+      - The error is passed forward through the next function as a param.
+        - If next was called without an argument, then the execution would simply move onto the next route or middleware.
+    - Execution will continue to the error handler middleware.
+      - We can define conditions for specific errors res.
+
+  - The order of middleware loading = be careful when defining middleware app.use() order!!
+  - Other operations (on mongoose)
+
+    - **UPDATE** -> [.findByIdAndUpdate(id, updatedResource, options)](https://mongoosejs.com/docs/api/model.html#model_Model-findByIdAndUpdate)
+      - It receives a regular JavaScript object as its argument, and not a new note object created with the Note constructor function.
+      - By default, the updatedNote parameter of the event handler receives the original document without the modifications. We added the **optional { new: true } parameter**, which will cause our event handler to be called with the new modified document instead of the original.
+      - **IMPORTANT!!** carefull with how I pass the IDS:
+        - `req.params.id` -> as it comes from the browser
+        - `req.body.id` -> as it comes from the request body
+    - **DELETE** -> [.findByIdAndDelete()](<https://mongoosejs.com/docs/api/model.html#Model.findByIdAndDelete()>)
+
+  - Learnings from Exercises 3.15.-3.18.
+    - **Errors to consider**
+      - Error: The JSON payload has a syntax error due to a trailing comma.
+        JSON requires that all property names be double-quoted and that there are no trailing commas after the last property in an object.
+
+- #### Validation and ESLint
+
+  - Deploying the database backend to production
+
+    - **Validations to protect DB**
+      - Constraints applied to the data that is stored in our app db (ex: empty content properties) -[ Mongoose validation](https://mongoosejs.com/docs/validation.html) func: check format of the data before it is stored in the database.
+        - defined in the SchemaType
+          - [built-in](https://mongoosejs.com/docs/validation.html#built-in-validators) provided by Mongoose
+          - [Custom validator](https://mongoosejs.com/docs/validation.html#custom-validators)
+            - Declared by passing a validation function
+            ```
+            validate: {
+              velidator: (v) => { // receives the value (v) of the field being validated.
+                return someRegularExpression.test(v); // example: return /\d{2,3}-\d{6,}/.test(v);
+              }
+              message: (props) => { // props is an argument provided by Mongoose (using arrow functions).
+                return `${props.value} personalized message;
+              }
+            }
+            ```
+      - If we try to store an object in the database that breaks one of the constraints, the operation will throw an exception
+      - **Important!** Validations are not run by default when findOneAndUpdate and related methods are executed.
+        - We need to add `runValidators: true` to the option object
+        ```
+        Note.findByIdAndUpdate(
+          request.params.id,
+          { content, important },
+          { new: true, runValidators: true, context: 'query' } // This option run the validator
+        )
+        ```
+    - The environment variables defined in dotenv will only be used when the backend is not in production mode, i.e. Fly.io or Render.
+      - For production, we have to set the database URL in the service that is hosting our app.
+
+  - Learnings from Exercises 3.19.-3.21.
+
+    - `findByIdAndUpdate()` method in Mongoose doesn't throw an error if the ID doesn't exist. Instead, it simply returns `null`. You need to handle this case explicitly in your .then block to return an appropriate response
+      ```
+      if (!result) {
+            return res.status(404).json({ error: 'Error feedback...' });
+        }
+      ```
+
+  - [Lint](<https://en.wikipedia.org/wiki/Lint_(software)>)
+
+    - Wikipedia Definition: Lint or a linter is any tool that detects and flags errors in programming languages, including stylistic errors. The term lint-like behavior is sometimes applied to the process of flagging suspicious language usage. Lint-like tools generally perform static analysis of source code.
+
+    - JS leading tool for static analysis (aka "linting") is [ESlint](https://eslint.org/)
+      - **IMPORTANT** = [ESLint IS NOT a formater](https://www.youtube.com/watch?v=Cd-gBxzcsdA) (Aka: Prettier), it is a linter
+        ![alt text](assets/FormaterVSLinter.png)
+    - Installl it as a development dependency: `npm i -D eslint`.
+      Note: the -D flag stands for --save-dev
+
+      - The v.8.x (legacy) from the course has broadly change in the v9.x (actually manteined)
+        - [eslint.config.mjs](https://eslint.org/docs/latest/use/configure/configuration-files) (Flat Config Files = actual used) vs .eslintrc.js
+          - `.eslintignore` deprecated, [we use the ignores code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) `{ ignores: ["**/dist"] }` inside the falt config file.
+
+    - Installing the [ESLint Stylistic plugin](https://eslint.style/guide/getting-started) = a collection of stylistic rules for ESLint.
+
+      - JS and TS package installation: `npm i -D @stylistic/eslint-plugin`
+      - Porpouse: With stylistic rules in ESLint, we are able to achieve similar formatting compatibility while retaining the original code style that reflects the authors/teams' intentions, and apply fixes in one go ([read: Why I don't use Prettier](https://antfu.me/posts/why-not-prettier))
+
+    - Initialize a default ESlint configuration: `npm init @eslint/config@latest`
+      - This will add dependencies: `eslint@9.x, globals, @eslint/js`
+        - [Rule Severities:](https://eslint.org/docs/latest/use/configure/rules#rule-severities) set the rule ID equal to one of these values:
+          - "off" or 0 - turn the rule off
+          - "warn" or 1 - turn the rule on as a warning (doesn’t affect exit code)
+          - "error" or 2 - turn the rule on as an error (exit code is 1 when triggered)
+        - [Add to the enlist.config.mjs](https://eslint.style/packages/js)
+        - [Add four rules defined on plugin](https://eslint.style/packages/js#rules)
+    - Create a separate npm script for linting in the package.json: `"lint": "eslint ."`
+      - alternative to executing the linter from the command line is to configure an eslint-plugin to the editor: [Visual Studio ESLint plugin](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+      - it can be a good idea to adopt a ready-made configuration from someone else's project into yours:
+        - [AirBnB JS Style Guide](https://github.com/airbnb/javascript) -> A[irbnb's ESlint configuration into use.](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb)
+        - Rules to make my code robust:
+        ```
+        rules: {
+          "@stylistic/js/indent": ["error", 2], // Enforce 2-space indentation
+          "@stylistic/js/linebreak-style": ["error", "unix"], // Enforce Unix-style line endings
+          "@stylistic/js/quotes": ["error", "double"], // Enforce double quotes
+          eqeqeq: "error", // Enforce strict equality comparisons
+          "array-callback-return": "error", //Enforce Return Statements in Callbacks
+          "no-alert": "warn", // Disallow alert, confirm, and prompt
+          "no-eval": "error", // Disallow eval()
+          "no-extend-native": "error", // Disallow Extending Native Objects:
+          "no-trailing-spaces": "error", // Disallow trailing spaces
+          "object-curly-spacing": ["error", "always"], // Enforce spacing around object curly braces
+          "arrow-spacing": ["error", { before: true, after: true }], // Enforce spacing around arrow function parameters
+          "no-multiple-empty-lines": "error", // Disallow multiple empty lines
+          "no-unneeded-ternary": "warn", // Warn on unneeded ternary expressions
+          "no-console": 0, // Disable the `no-console` rule
+        },
+        ```
+
+  - Learnings from Exercise 3.22.
+
+    - ctrl + g --> find line:column fast in vsc
+    - It is a little fuzzy the dif between formaters and lint tools, specially if you add the ESLint Stylistic plugin.
+    - Talking about formater (using Prettier) I'm getting different results using "ctrl+s" vs "Format document with: prettier". To avoid this:
+      - Define the Prettier settings directly in your workspace's settings.json file. Go to the Command Palette (Ctrl+Shift+P) and type Preferences: Open Workspace Settings (JSON).
+      - This is the right configuration code for the JSON:
+      ```
+        {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "git.ignoreLimitWarning": true,
+        "prettier.singleQuote": false,
+        "prettier.trailingComma": "es5",
+        "prettier.tabWidth": 2,
+        "prettier.semi": true,
+        "prettier.printWidth": 80,
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[html]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[css]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[markdown]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      }
+      ```

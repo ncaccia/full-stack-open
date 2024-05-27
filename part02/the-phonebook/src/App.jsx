@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import personService from './services/persons'
+import personService from './services/people'
 
 // Search filter component
 const Filter = ({ filterInput, filter }) => {
@@ -40,9 +40,9 @@ const AddPerson = ({ states, functions }) => {
 
 // Show contacts in list component
 const ContactList = ({ states, deletePerson }) => {
-  const [persons, filter] = states;
+  const [people, filter] = states;
 
-  const filteredPersons = persons.filter(person =>
+  const filteredPeople = people.filter(person =>
     person.name.toLocaleLowerCase().includes(filter.toLowerCase()
     ));
 
@@ -54,9 +54,9 @@ const ContactList = ({ states, deletePerson }) => {
 
   const RenderList = () => {
     if (filter.length === 0) {
-      return persons.map(RenderPerson);
-    } else if (filteredPersons.length > 0) {
-      return filteredPersons.map(RenderPerson);
+      return people.map(RenderPerson);
+    } else if (filteredPeople.length > 0) {
+      return filteredPeople.map(RenderPerson);
     } else {
       return <p>No matches were found</p>;
     }
@@ -117,7 +117,7 @@ const Notification = ({ notification }) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
+  const [people, setPeople] = useState([]);
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [filter, setFilter] = useState('');
@@ -127,7 +127,7 @@ const App = () => {
     personService
       .getAll()
       .then(initialData => {
-        setPersons(initialData)
+        setPeople(initialData)
       })
   }, []);
 
@@ -156,8 +156,8 @@ const App = () => {
       name: newName,
       phone: newPhone,
     };
-    const foundPerson = persons.find(p => p.name.toLowerCase() === newName.toLowerCase());
-    const isPhoneDuplicated = persons.some(p => p.phone === newPhone);
+    const foundPerson = people.find(p => p.name.toLowerCase() === newName.toLowerCase());
+    const isPhoneDuplicated = people.some(p => p.phone === newPhone);
 
     if (isPhoneDuplicated) {
       alert(`${newPhone} is already added to the phonebook, try another phone combination or edit the contact please`);
@@ -171,7 +171,7 @@ const App = () => {
         personService
           .update(foundPerson.id, { ...foundPerson, phone: newPerson.phone })
           .then(updatedPerson => {
-            setPersons(prevPersons => prevPersons.map(p =>
+            setPeople(prevPeople => prevPeople.map(p =>
               p.id === foundPerson.id ? { ...p, phone: updatedPerson.phone } : p
             ));
             setNewName('');
@@ -182,8 +182,9 @@ const App = () => {
           .catch(err => {
             console.error("Error updating person:", err.message);
             console.log("running update error notification....");
-            notificationMessage("error", `Alert!! ${foundPerson.name} has already been deleted from the phonebook`);
-            setPersons(persons.filter(p => p.id !== foundPerson.id))
+            notificationMessage("error", err.response.data.error);
+            // notificationMessage("error", `Alert!! ${foundPerson.name} has already been deleted from the phonebook`);
+            // setPeople(people.filter(p => p.id !== foundPerson.id)) // this is no longer needed
           });
       } else {
         return;
@@ -192,15 +193,17 @@ const App = () => {
       personService
         .create(newPerson)
         .then(newPerson => {
-          setPersons(persons.concat(newPerson));
+          setPeople(people.concat(newPerson));
           setNewName('');
           setNewPhone('');
           console.log("running update notification....");
           notificationMessage("success", `${newPerson.name} successfully added to the phonebook`)
         })
-        .catch(() => {
-          notificationMessage("error", `Alert!! ${foundPerson.name} has already been deleted from the phonebook`);
-          setPersons(persons.filter(p => p.id !== foundPerson.id))
+        .catch((err) => {
+          console.log(err.response.data.error);
+          notificationMessage("error", err.response.data.error);
+          // notificationMessage("error", `Alert!! ${foundPerson.name} has already been deleted from the phonebook`);
+          // setPeople(people.filter(p => p.id !== foundPerson.id)) // this is no longer needed
         });
     }
   }
@@ -210,7 +213,7 @@ const App = () => {
       personService
         .destroy(id)
         .then(() => {
-          setPersons(persons.filter(p => p.id !== id))
+          setPeople(people.filter(p => p.id !== id))
           notificationMessage("success", `${name} successfully deleted from the phonebook`)
         })
         .catch(err =>
@@ -232,7 +235,7 @@ const App = () => {
         functions={[addPerson, nameInput, phoneInput]}
       />
       <ContactList
-        states={[persons, filter]}
+        states={[people, filter]}
         deletePerson={deletePerson}
 
       />
