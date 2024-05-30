@@ -13,10 +13,11 @@ For each listed blog we will save:
   - [x] Application turned into a functioning npm project + executed with nodemon.
   - [x] Database created on MongoDB Atlas (using the same database from the previous part's exercises).
   - [x] 3 Blogs added to the list withVS Code REST
-        ![alt text](image.png)
+        ![alt text](assets/mongoAtlasDB-connected.png)
 - [x] 4.2 Blog List, step 2, refactor the original code into separate modules
   - [x] Utils refactor
-  - [x] app.js creation and first refactor 
+  - [x] app.js creation and first refactor
   - [x] model refactor
-  - [ ] controllers/blogs routes refactor
-  - [ ] app.js refactor
+  - [x] controllers/blogs routes refactor
+  - [x] app.js refactor
+        ![alt text](assets/request-test-after-refactor.png)
