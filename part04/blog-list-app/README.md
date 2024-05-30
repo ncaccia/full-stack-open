@@ -14,3 +14,4 @@ For each listed blog we will save:
   - [x] Database created on MongoDB Atlas (using the same database from the previous part's exercises).
   - [x] 3 Blogs added to the list withVS Code REST
         ![alt text](image.png)
+- [x] 4.2 Blog List, step 2, refactor the original code into separate modules
