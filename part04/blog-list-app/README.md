@@ -15,3 +15,7 @@ For each listed blog we will save:
   - [x] 3 Blogs added to the list withVS Code REST
         ![alt text](image.png)
 - [x] 4.2 Blog List, step 2, refactor the original code into separate modules
+  - [x] Utils refactor
+  - [ ] app.js creation and first refactor 
+  - [ ] model refactor
+  - [ ] app.js refactor
