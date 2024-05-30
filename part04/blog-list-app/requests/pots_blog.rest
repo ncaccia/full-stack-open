@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Wild Hearted",
+    "author": "Annastasia",
+    "url": "https://wild-hearted.com/",
+    "likes": 93
+}

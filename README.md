@@ -10,7 +10,7 @@
 
 ## Notes from the Helsinski Full Stack Open course
 
-## PART 00
+## PART 00 Fundamentals of Web apps
 
 - #### Fundamentals of Web apps
   - HTTP GET
@@ -28,7 +28,7 @@
   - Full-stack web development
   - JavaScript fatigue [link](https://auth0.com/blog/how-to-manage-javascript-fatigue/)
 
-## PART 01
+## PART 01 Introduction to React
 
 - #### Introduction to React
   - create-react-app
@@ -75,7 +75,7 @@
   - Web programmers oath
   - Utilization of Large language models
 
-## PART 02
+## PART 02 Communicating with server
 
 - #### Rendering a collection, modules
   - [Visual Studio Code snippets](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets)
@@ -149,7 +149,7 @@
         - To prevent it, use a **debounce** technique: limit the rate at which a function is executed. Triggering Events --> Delay --> Resetting the Delay --> Executing the Function
         - [Debounce and throttle](https://www.youtube.com/watch?v=cjIswDCKgu0)
 
-## Part 03
+## Part 03 Programming a server with NodeJS and Express
 
 - #### Node.js and Express
 
@@ -694,3 +694,105 @@
         }
       }
       ```
+
+## Part 04 [ 21/25hs ] Testing Express servers, user administration
+
+Backnend work. Writing unit and integration tests for the backend. Implementing user authentication and authorization.
+
+- #### Structure of backend application, introduction to testing
+
+  - [Best practice structure](https://dev.to/nermineslimane/always-separate-app-and-server-files--1nc7) of our project === basic for testings
+
+    - Separate the **code taking care of the web server** from the **Express app**.
+
+      - `app.js` -> responsible for setting up the core of the Express application, including middleware, routes, and other configurations.
+
+        - Typical Contents:
+          Importing and using middleware (e.g., body-parser, cors, helmet).
+          Defining routes by importing route handlers/controllers.
+          Setting up error handling middleware.
+          Connecting to the database (though sometimes this is done in a separate file).
+
+      - `index.js` -> Application Entry Point and Server Configuration.
+        - Responsible for starting the server and handling environment-specific configurations.
+        - Typical Contents:
+          Importing the Express app from app.js.
+          Configuring environment variables.
+          Starting the server and listening on a specific port.
+          Handling server-related events and logging.
+
+      ```
+      ├── index.js
+      ├── app.js
+      ├── dist
+      │   └── ...
+      ├── controllers
+      │   └── notes.js
+      ├── models
+      │   └── note.js
+      ├── package-lock.json
+      ├── package.json
+      ├── utils
+      │   ├── config.js
+      │   ├── logger.js
+      │   └── middleware.js
+      ```
+
+  - `services` dir -> things that your app provides, either externally or internally.
+    - Example: `userService` for saving or retrieving user details.
+  - `utils` dir -> tools that you use, to simplify your codes or as a wrapper for external tool.
+    - Example: `dateUtil` for parsing or formatting date time values.
+    - Creating `utils` dir
+      - `config.js`
+      - `logger.js`
+      - `middleware.js`
+      - Extra note about loggin utils: we can send data to external logging service like graylog or papertrail
+  - `controllers` dir -> Separate Route handlers into a dedicated module
+    - Create a [Router object](https://expressjs.com/en/api.html#router) Capable only of performing middleware and routing functions.
+      `const xyzRouter = require("express").Router();`
+    - Shorten the paths in the route handlers.
+    - Require the route ron the `index.js`
+      ```
+      const xyzRouter = require('./controllers/notes')
+      app.use('/api/xyz', xyzRouter)
+      ```
+      The router we defined earlier is used if the URL of the request starts with /api/notes
+  - Create `app.js`:
+
+    - takes different middleware into use
+    - The responsibility of establishing the connection to the database has been given to the app.js module. The model.js file under the models directory only defines the Mongoose schema for notes.
+
+  - module.export variations:
+
+    - module.exportes = { object of functions} -> assign an object directly to module.exports
+    - module.exportes = functions -> 
+
+    - VS Code allows you to see where your modules have been exported -> right-click on a variable in the location it is exported from and select "Find All References"
+      - It will not work if you destructure where you are importing
+      - It will not work if you assign an object directly to module.exports
+
+- #### Testing the backend
+
+- #### User administration
+
+- #### Token authentication
+
+- #### Legacy: Testing with Jest
+
+## Part 05 [ 20/21hs ] Testing React apps
+
+## Part 06 [ 20/21hs ] Advanced state management
+
+## Part 07 [ 20/30hs ] React router, custom hooks, styling app with CSS and webpack
+
+## SIDE NOTES - LEARNINGS
+
+- #### Managing UTC dates
+
+  1.  Parsing data inside an object into JavaScript Date object:
+  2.  Convert this date and time to UTC.
+  3.  Extract the UTC components (year, month, day, hour, minutes) from the Date object.
+
+  ```
+  const localDateTimeString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T${String(hour).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+  ```
