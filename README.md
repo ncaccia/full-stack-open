@@ -765,11 +765,14 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
   - module.export variations:
 
     - module.exportes = { object of functions} -> assign an object directly to module.exports
-    - module.exportes = functions -> 
+    - module.exportes = functions ->
 
     - VS Code allows you to see where your modules have been exported -> right-click on a variable in the location it is exported from and select "Find All References"
       - It will not work if you destructure where you are importing
       - It will not work if you assign an object directly to module.exports
+
+  - Learning from exercises 4.1. to 4.2.
+    - **One best practice is to commit your code every time it is in a stable state.** If you try to take a "shortcut" by refactoring many things at once, then Murphy's law will kick in and it is almost certain that something will break in your application. The "shortcut" will end up taking more time than moving forward slowly and systematically.
 
 - #### Testing the backend
 

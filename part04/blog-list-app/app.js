@@ -4,25 +4,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
+const Blog = require("./models/blog");
 const logger = require("./utils/logger");
-
-// Create Blog Schema
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number,
-});
-
-blogSchema.set("toJSON", {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
-  },
-});
-
-const Blog = mongoose.model("Blog", blogSchema);
 
 // Connect to MongoDB atlas
 

@@ -16,6 +16,7 @@ For each listed blog we will save:
         ![alt text](image.png)
 - [x] 4.2 Blog List, step 2, refactor the original code into separate modules
   - [x] Utils refactor
-  - [ ] app.js creation and first refactor 
-  - [ ] model refactor
+  - [x] app.js creation and first refactor 
+  - [x] model refactor
+  - [ ] controllers/blogs routes refactor
   - [ ] app.js refactor
