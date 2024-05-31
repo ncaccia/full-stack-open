@@ -321,7 +321,7 @@
 
 - #### Saving data to MongoDB
 
-  - Debugging Node applications
+  - [Debugging Node applications](https://fullstackopen.com/en/part3/saving_data_to_mongo_db#debugging-node-applications)
     - Read more:
       - [JS debugging beyond console.log](https://swizec.com/blog/javascript-debugging-slightly-beyond-consolelog/)
       - [I am a puts debuggerer](https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html)
@@ -774,7 +774,36 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
   - Learning from exercises 4.1. to 4.2.
     - **One best practice is to commit your code every time it is in a stable state.** If you try to take a "shortcut" by refactoring many things at once, then Murphy's law will kick in and it is almost certain that something will break in your application. The "shortcut" will end up taking more time than moving forward slowly and systematically.
 
-- #### Testing the backend
+- #### Testing the backend (automated)
+
+  - [Software Testing Explained in 100 Seconds](https://www.youtube.com/watch?v=u6QfIXgjwGQ)
+  - [Test-Driven Development](https://www.youtube.com/watch?v=Jv2uxzhPFl4)
+  - There are test libraries or test runners available for JavaScript:
+
+    - The old king of test libraries is [Mocha](https://mochajs.org/), which was replaced a few years ago by [Jest](https://jestjs.io/). A newcomer to the libraries is [Vitest](https://vitest.dev/), which bills itself as a new generation of test libraries.
+    - Node also has a built-in test library [node:test](https://nodejs.org/docs/latest/api/test.html)
+
+      - We require inside the .test.js file through `const assert = require("node:assert");`
+
+      - add `"test": "node --test"` to de package.json scripts
+      - touch utils/for_testing.js -> add functions that we can use for test
+      - mkdir tests -> touch tests//reverse.test.js (to add each test file, this is an example)
+
+        - convention of naming our tests files with the extension .test.js.
+
+        ```
+        const { test } = require('node:test') // test defines the keyword test
+        const assert = require('node:assert') // library assert which is used by the tests to check the results of the functions under test.
+
+        // the test code
+        // ...
+        ```
+
+      - `describe("collection name", () => {tests})` blocks can be used for grouping tests into logical collections. The test output also uses the name of the describe block:
+
+        - are necessary when we want to run some shared setup or teardown operations for a group of tests
+
+      - [Differences between various assert module functions Stack Overflow debate.](https://stackoverflow.com/questions/16745855/difference-between-equal-deep-equal-and-strict-equal/73937068#73937068)
 
 - #### User administration
 
@@ -789,6 +818,9 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
 ## Part 07 [ 20/30hs ] React router, custom hooks, styling app with CSS and webpack
 
 ## SIDE NOTES - LEARNINGS
+
+- #### Other sources to learn JS
+- [JS High order functions playlist by FunFunFunctions](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84)
 
 - #### Managing UTC dates
 
