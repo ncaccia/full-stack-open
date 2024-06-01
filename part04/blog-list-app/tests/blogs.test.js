@@ -81,3 +81,49 @@ describe("Favorite Blog", () => {
     });
   });
 });
+
+describe("Blog Authors Tests", () => {
+  const listOfBlogs = [
+    {
+      title: "Go To Statement Considered Harmful",
+      author: "Edsger W. Dijkstra",
+      likes: 5,
+    },
+    {
+      title: "Yorkie Passion",
+      author: "Mary & bombon",
+      likes: 150,
+    },
+    {
+      title: "Nature World News",
+      author: "Mr big Dog",
+      likes: 37,
+    },
+    {
+      title: "Wild Hearted",
+      author: "Annastasia",
+      likes: 93,
+    },
+    {
+      title: "Maria Maria",
+      author: "Annastasia",
+      likes: 33,
+    },
+  ];
+
+  test("returns the author who has the largest amount of blogs", () => {
+    const result = listHelper.mostBlogs(listOfBlogs);
+    assert.deepStrictEqual(result, {
+      author: "Annastasia",
+      blogs: 2,
+    });
+  });
+
+  test("returns the author who has the largest amount of likes", () => {
+    const result = listHelper.mostLikes(listOfBlogs);
+    assert.deepStrictEqual(result, {
+      author: "Mary & bombon",
+      likes: 150,
+    });
+  });
+});

@@ -325,7 +325,9 @@
     - Read more:
       - [JS debugging beyond console.log](https://swizec.com/blog/javascript-debugging-slightly-beyond-consolelog/)
       - [I am a puts debuggerer](https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html)
-    - Visual studio steps to debug [(video tutorial)](https://www.youtube.com/watch?v=4Z8CM-E-HRE)
+    - BASIC: Visual studio steps to debug [(video tutorial)](https://youtu.be/4Z8CM-E-HRE?si=kKCNfzJr4dvUQTGx&t=830)
+      - Steps:
+        - debug-tab/Create a launch.json/select Node.js/
       - Option A = adding --inspect to node server
         - open a termina inside VSC and initiate terminal on the bar: `> create new terminal`
         - start the server with `node --inspect index.js`
@@ -804,6 +806,31 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
         - are necessary when we want to run some shared setup or teardown operations for a group of tests
 
       - [Differences between various assert module functions Stack Overflow debate.](https://stackoverflow.com/questions/16745855/difference-between-equal-deep-equal-and-strict-equal/73937068#73937068)
+
+  - Learnings from Exercise 4.6. 4.7.
+
+    - [Lodash library](https://lodash.com/docs/4.17.15) -> provides a variety of utility functions:
+      - Arrays:
+        - `_.countBy(blogs, (blog) => blog.author);` => object where the keys are authors' names + counts
+          ```
+          {
+            "Edsger W. Dijkstra": 1,
+            "Mary & bombon": 1,
+            "Mr big Dog": 1,
+            "Annastasia": 2
+          };
+          ```
+        - `_.maxBy(Object.keys(blogCounts), (author) => blogCounts[author]);`
+          - I used Object.keys() because  the result of contBy() is an object and this way its returns an array of the keys (author names) in the blogCounts object.
+
+        - `_.groupBy(blogs, 'author')` groups the blogs by the author's name, resulting in an object where the keys are author names and the values are arrays of blog objects.
+        - `_.mapValues(..., group => _.sumBy(group, 'likes'))` maps each group of blogs to the total number of likes for that group.
+        
+          - **Important note:** This can also be achieved by using reduce() native JS higher function for Grouping and Summing:
+            - The reduce function iterates over the blogs array once, accumulating the total likes for each author in the likesPerAuthor object. This approach ensures we only traverse the array a single time.
+              - Finding the Maximum Using reduce: The second reduce call finds the author with the maximum likes by comparing the likes of each author.
+    
+    - Debuggging Node.js Tesst that fail
 
 - #### User administration
 
