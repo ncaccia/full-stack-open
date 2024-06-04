@@ -7,6 +7,7 @@
 5. I progress with small steps
 6. I will write lots of console.log statements to make sure I understand how the code behaves and to help pinpoint problems
 7. If my code does not work, I will not write more code. Instead, I start deleting the code until it works or just return to a state when everything was still working
+8. f a test does not pass, I make sure that the tested functionality for sure works in the application
 
 ## Notes from the Helsinski Full Stack Open course
 
@@ -703,6 +704,8 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
 
 - #### Structure of backend application, introduction to testing
 
+  - **Project structure**
+
   - [Best practice structure](https://dev.to/nermineslimane/always-separate-app-and-server-files--1nc7) of our project === basic for testings
 
     - Separate the **code taking care of the web server** from the **Express app**.
@@ -740,43 +743,46 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
       │   └── middleware.js
       ```
 
-  - `services` dir -> things that your app provides, either externally or internally.
-    - Example: `userService` for saving or retrieving user details.
-  - `utils` dir -> tools that you use, to simplify your codes or as a wrapper for external tool.
-    - Example: `dateUtil` for parsing or formatting date time values.
-    - Creating `utils` dir
-      - `config.js`
-      - `logger.js`
-      - `middleware.js`
-      - Extra note about loggin utils: we can send data to external logging service like graylog or papertrail
-  - `controllers` dir -> Separate Route handlers into a dedicated module
-    - Create a [Router object](https://expressjs.com/en/api.html#router) Capable only of performing middleware and routing functions.
-      `const xyzRouter = require("express").Router();`
-    - Shorten the paths in the route handlers.
-    - Require the route ron the `index.js`
-      ```
-      const xyzRouter = require('./controllers/notes')
-      app.use('/api/xyz', xyzRouter)
-      ```
-      The router we defined earlier is used if the URL of the request starts with /api/notes
-  - Create `app.js`:
+    - `services` dir -> things that your app provides, either externally or internally.
+      - Example: `userService` for saving or retrieving user details.
+    - `utils` dir -> tools that you use, to simplify your codes or as a wrapper for external tool.
+      - Example: `dateUtil` for parsing or formatting date time values.
+      - Creating `utils` dir
+        - `config.js`
+        - `logger.js`
+        - `middleware.js`
+        - Extra note about loggin utils: we can send data to external logging service like graylog or papertrail
+    - `controllers` dir -> Separate Route handlers into a dedicated module
+      - Create a [Router object](https://expressjs.com/en/api.html#router) Capable only of performing middleware and routing functions.
+        `const xyzRouter = require("express").Router();`
+      - Shorten the paths in the route handlers.
+      - Require the route ron the `index.js`
+        ```
+        const xyzRouter = require('./controllers/notes')
+        app.use('/api/xyz', xyzRouter)
+        ```
+        The router we defined earlier is used if the URL of the request starts with /api/notes
+    - Create `app.js`:
 
     - takes different middleware into use
     - The responsibility of establishing the connection to the database has been given to the app.js module. The model.js file under the models directory only defines the Mongoose schema for notes.
 
-  - module.export variations:
+    - module.export variations:
 
     - module.exportes = { object of functions} -> assign an object directly to module.exports
-    - module.exportes = functions ->
 
-    - VS Code allows you to see where your modules have been exported -> right-click on a variable in the location it is exported from and select "Find All References"
-      - It will not work if you destructure where you are importing
-      - It will not work if you assign an object directly to module.exports
+      - module.exportes = functions ->
 
-  - Learning from exercises 4.1. to 4.2.
-    - **One best practice is to commit your code every time it is in a stable state.** If you try to take a "shortcut" by refactoring many things at once, then Murphy's law will kick in and it is almost certain that something will break in your application. The "shortcut" will end up taking more time than moving forward slowly and systematically.
+      - VS Code allows you to see where your modules have been exported -> right-click on a variable in the location it is exported from and select "Find All References"
+        - It will not work if you destructure where you are importing
+        - It will not work if you assign an object directly to module.exports
 
-- #### Testing the backend (automated)
+    - Learning from exercises 4.1. to 4.2.
+      - **One best practice is to commit your code every time it is in a stable state.** If you try to take a "shortcut" by refactoring many things at once, then Murphy's law will kick in and it is almost certain that something will break in your application. The "shortcut" will end up taking more time than moving forward slowly and systematically.
+
+- **Testing Node Applicataions (unit testing)**
+
+  - **Unit testing:** a.k.a. component or [module testing](https://en.wikipedia.org/wiki/Unit_testing), is a form of software testing by which isolated source code is tested to validate expected behavior.
 
   - [Software Testing Explained in 100 Seconds](https://www.youtube.com/watch?v=u6QfIXgjwGQ)
   - [Test-Driven Development](https://www.youtube.com/watch?v=Jv2uxzhPFl4)
@@ -810,7 +816,9 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
   - Learnings from Exercise 4.6. 4.7.
 
     - [Lodash library](https://lodash.com/docs/4.17.15) -> provides a variety of utility functions:
+
       - Arrays:
+
         - `_.countBy(blogs, (blog) => blog.author);` => object where the keys are authors' names + counts
           ```
           {
@@ -821,16 +829,164 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
           };
           ```
         - `_.maxBy(Object.keys(blogCounts), (author) => blogCounts[author]);`
-          - I used Object.keys() because  the result of contBy() is an object and this way its returns an array of the keys (author names) in the blogCounts object.
+
+          - I used Object.keys() because the result of contBy() is an object and this way its returns an array of the keys (author names) in the blogCounts object.
 
         - `_.groupBy(blogs, 'author')` groups the blogs by the author's name, resulting in an object where the keys are author names and the values are arrays of blog objects.
         - `_.mapValues(..., group => _.sumBy(group, 'likes'))` maps each group of blogs to the total number of likes for that group.
-        
+
           - **Important note:** This can also be achieved by using reduce() native JS higher function for Grouping and Summing:
             - The reduce function iterates over the blogs array once, accumulating the total likes for each author in the likesPerAuthor object. This approach ensures we only traverse the array a single time.
               - Finding the Maximum Using reduce: The second reduce call finds the author with the maximum likes by comparing the likes of each author.
+
+    - Debuggging Node.js Test that fail
+
+- #### Testing the backend (automated)
+  - **[Integration testing](https://en.wikipedia.org/wiki/Integration_testing)**: Testing where multiple components of the system are being tested.
+    - Note: mocking the database instead of using a real database ([mongodb-memory-server](https://github.com/nodkz/mongodb-memory-server)) can be useful for running backend tests.
+
+  - **Test environment**
+    - convention in Node is to define the execution mode of the application with the `NODE_ENV` environment variable. Common practice to define separate modes (separate them on the package.json file)
+      - for production: `"start": "NODE_ENV=production node index.js"`
+      - for development: `"dev": "NODE_ENV=development nodemon index.js"`
+      - for testing: `"test": "NODE_ENV=test node --test"`
+      
+      - adapt the utils/config.js to switch enviroment variables (this must be inside .env file)
+        ```
+        const MONGODB_URI = process.env.NODE_ENV === 'test' 
+        ? process.env.TEST_MONGODB_URI
+        : process.env.MONGODB_URI
+        ```
+        The config module that we have implemented slightly resembles the [node-config package](https://github.com/node-config/node-config).
     
-    - Debuggging Node.js Tesst that fail
+    - to run our tests using a database that is installed and running on the developer's local machine. The optimal solution would be to have every test execution use a separate database. This is "relatively simple" to achieve by running Mongo in-memory or by using Docker containers.
+
+  - **supertest**
+    - [package](https://github.com/ladjs/supertest) to help us write our tests for testing the API.
+      - `model_api.test.js`: imports the Express application from the app.js module and wraps it with the supertest function into a so-called **superagent** object. This object is assigned to the api variable and tests can use it for making HTTP requests to the backend.
+        - `.expeted('Content-Type', /application\/json/)` -> defined as regular expression 
+          - ≠ to exact string because we want to omit other info on the string.
+          - starts and ends with a slash /
+          - If the desired string contains the same slash, it is preceded by a \ so that it is not interpreted as a regex termination character.
+        - `after()`: Once all the [tests have finished](https://nodejs.org/api/test.html#afterfn-options) running we have to **close the database connection**
+      - Extra note:
+        - index.js vs app.js: The tests only use the Express application defined in the app.js file, which does not listen to any ports. This is because supertest takes care that the application being tested is started at the port that it uses internally.
+      - middleware can obstruct the test execution output -> we can add condition to the logs: `if (process.env.NODE_ENV !== 'test')`
+      
+  - Initializing the database before tests
+    - Important: tests are bad designed if they are dependent on the state of the database
+      - reset the database and generate the needed test data in a controlled manner before we run the tests. [beforeEach](https://nodejs.org/api/test.html#beforeeachfn-options) node:test function: initialize the database before every test.
+        - We need to require the collection Schema from our proyect models in order to interact with it.
+        - **WARNING!** All the db will be errased (Use a development DB)
+        - Add the initialData array as a variable before the tests.
+        - Add this code before the test:
+        ```
+        beforeEach(async () => {
+          await collection.deleteMany({})
+          let collectiontemObject = new collection(theInitialDataArray[0])
+          await collectionObject.save()
+          // add as manny as there are in the initial data array
+        })
+        ```
+
+  - Methods for running tests one by one
+
+    1. `.only`:  add this argument to each test -> `test.only(...)` + run test with the command `npm test --test-only`. When using `describe.only()` too.
+       note:
+       `--` indicate the end of options for a command. Any arguments following -- are treated as positional arguments (arguments directly passed to the script being executed).
+       `-` used for short aliases to command-line flags.
+      
+    2. Specify the tests that need to be run as arguments of the npm test command. Ex: `npm test -- tests/note_api.test.js` 
+ 
+    3. `--tests-by-name-pattern=` option can be used for running tests with a specific name. Ex: `npm test -- --test-name-pattern="the first note is about HTTP methods"`
+       - can refer to the name of the test or the describe block. It can also contain just a part of the name.
+
+  - **async/await** (introduced in ES7)
+
+    - Makes the asynchronous code look synchronous.
+    - Oldway:  If we wanted to make several asynchronous function calls in sequence, the situation would soon become painful = [callback hell](http://callbackhell.com/)
+      - [Await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await) operator
+      - To use the await operator with asynchronous operations, they have to return a promise.
+      - Using await is possible only inside of an [async](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) function.
+      - The execution of code pauses at const notes = await Note.find({}) and waits until the related promise is fulfilled, and then continues its execution to the next line
+          ```
+          // old-way:
+          Note.find({})
+            .then(notes => {
+              console.log('operation returned the following notes', notes)
+          })
+
+          // new-way
+          const notes = await Note.find({})
+          console.log('operation returned the following notes', notes)
+
+          ```
+  - **async/await in the backend**
+      
+      ```
+        // Example
+        notesRouter.get('/', async (request, response) => { 
+          const notes = await Note.find({})
+          response.json(notes)
+        })
+      ```
+
+  - More tests and refactoring the backend
+    
+    - Risk of [regression](https://en.wikipedia.org/wiki/Regression_testing): while refactoring our code existing functionality may break
+      **IMPORTANT! **It is a good practice, BEFORE refactor, build the test and if it pass, we can safely refactor the tested routes to use async/await
+
+    - if we are repeting functions among the test, we can build a `test/test_helper.js` file
+
+  - Error handling and async/await
+    - To avoid ending up with an unhandled promise rejection, we use try/catch mechanism.
+
+  - Eliminating the try-catch
+    - When using async/await functions, all of the route handlers follow the same structure
+        ```
+        try {
+            // do the async operations here
+          } catch(exception) {
+            next(exception)
+          }
+        ```
+    -  The [express-async-errors](https://github.com/davidbanham/express-async-errors) library has a solution for this.
+       -  introduce the library in app.js, **before** you import your routes: `require('express-async-errors')`. The library allows us to **eliminate the try-catch blocks** completely. 
+       -  The library handles everything under the hood. If an exception occurs in an async route, the execution is automatically passed to the error-handling middleware.
+
+  - Optimizing the `beforeEach` function
+    - Better way of saving multiple objects to the database:
+      - Warning: Since the execution of tests begins immediately after beforeEach has finished executing, the execution of tests begins before the database state is initialized.
+        - A. wait for all of the asynchronous operations to finish executing with the Promise.all method. It can be used for transforming an array of promises into a single promise, that will be fulfilled once every promise in the array passed to it as an argument is resolved. The last line of code await Promise.all(promiseArray) waits until every promise for saving a note is finished, meaning that the database has been initialized.
+          Promise.all executes the promises it receives in parallel. If the promises need to be executed in a particular order, this will be problematic
+          ```
+          beforeEach(async () => {
+            await Note.deleteMany({})
+
+            const noteObjects = helper.initialNotes
+              .map(note => new Note(note))
+            const promiseArray = noteObjects.map(note => note.save())
+            await Promise.all(promiseArray)
+          })
+          ```
+        - B. The operations can be executed inside of a for...of block, that guarantees a specific execution order.
+          ```
+            beforeEach(async () => {
+              await Note.deleteMany({})
+
+              for (let note of helper.initialNotes) {
+                let noteObject = new Note(note)
+                await noteObject.save()
+              }
+            })
+          ```
+
+  - Learnings from Exercises 4.8.-4.12.
+    -
+
+  - Refactoring tests Exercises 4.13.-4.14.
+    -
+    
 
 - #### User administration
 
@@ -847,7 +1003,10 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
 ## SIDE NOTES - LEARNINGS
 
 - #### Other sources to learn JS
-- [JS High order functions playlist by FunFunFunctions](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84)
+
+  - IF I WANT TO LEARN JS, READ [THIS](https://github.com/getify/You-Dont-Know-JS/tree/1st-ed)
+
+  - [JS High order functions playlist by FunFunFunctions](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84)
 
 - #### Managing UTC dates
 
