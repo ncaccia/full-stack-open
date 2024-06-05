@@ -8,6 +8,9 @@ blogsRouter.get("/", async (req, res, next) => {
 
 blogsRouter.post("/", async (req, res, next) => {
   const blog = new Blog(req.body);
+  if (!blog.title || !blog.url) {
+    res.status(400).end();
+  }
   if (!blog.likes) {
     blog.likes = 0;
   }

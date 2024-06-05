@@ -99,4 +99,25 @@ describe("/api/blogs tests", () => {
     const savedBlog = await Blog.findById(response.body.id);
     assert.strictEqual(savedBlog.likes, 0);
   });
+
+  test("If the title property is missing from the request, respond with 400 Bad Request", async () => {
+    const newBlog = {
+      author: "Test Author",
+      url: "http://testblog.com",
+    };
+
+    await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400);
+  });
+
+  test("If the url property is missing from the request, respond with 400 Bad Request", async () => {
+    const newBlog = {
+      title: "Test Blog",
+      author: "Test Author",
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(400);
+  });
 });
