@@ -72,4 +72,14 @@ describe("/api/blogs tests", () => {
     const response = await api.get("/api/blogs");
     assert.strictEqual(response.body.length, initialBlogs.length);
   });
+
+  test("Blog posts have an 'id' property instead of '_id'", async () => {
+    const res = await api.get("/api/blogs");
+    const blogs = res.body;
+
+    blogs.forEach((blog) => {
+      assert.ok(blog.id);
+      assert.strictEqual(blog._id, undefined);
+    });
+  });
 });

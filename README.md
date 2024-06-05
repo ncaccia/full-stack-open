@@ -792,6 +792,13 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
     - Node also has a built-in test library [node:test](https://nodejs.org/docs/latest/api/test.html)
 
       - We require inside the .test.js file through `const assert = require("node:assert");`
+      - Common **assert** Methods
+        - `assert.ok(value[, message])` -> Asserts that value is truthy. If value is falsy, throws an error with the optional message.
+        - `assert.strictEqual(actual, expected[, message])` -> pected using the strict equality operator (===). If not, throws an error with the optional message.
+        - `assert.deepStrictEqual(actual, expected[, message])` ->  Asserts that actual and expected are deeply equal, meaning all nested properties are strictly equal.
+        - `assert.throws(block[, error][, message])` -> Asserts that the block function throws an error. 
+        - `assert.equal(actual, expected[, message])` -> Asserts that actual == expected using the loose equality operator
+
 
       - add `"test": "node --test"` to de package.json scripts
       - touch utils/for_testing.js -> add functions that we can use for test
