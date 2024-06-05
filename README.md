@@ -842,8 +842,31 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
     - Debuggging Node.js Test that fail
 
 - #### Testing the backend (automated)
+
+Important to read:
+Theo - t3․gg [Most important tests rule](https://www.youtube.com/watch?v=FF50H2RWaEY): "Add tests when they solve problems that only tests can solve"
+  === using external library cases
+
   - **[Integration testing](https://en.wikipedia.org/wiki/Integration_testing)**: Testing where multiple components of the system are being tested.
     - Note: mocking the database instead of using a real database ([mongodb-memory-server](https://github.com/nodkz/mongodb-memory-server)) can be useful for running backend tests.
+      - The mongodb-memory-server creates an in-memory MongoDB instance with its own URI, so you don't need a separate URI for testing in your `.env` file:
+        ```
+        // config.js should look like this:
+        
+        require('dotenv').config();
+
+        const PORT = process.env.PORT || 3000;
+        const MONGODB_URI = process.env.NODE_ENV === 'test' 
+          ? null // No need for TEST_MONGODB_URI
+          : process.env.MONGODB_URI;
+
+        module.exports = {
+          MONGODB_URI,
+          PORT,
+        };
+
+        ```
+    - 
 
   - **Test environment**
     - convention in Node is to define the execution mode of the application with the `NODE_ENV` environment variable. Common practice to define separate modes (separate them on the package.json file)
@@ -862,8 +885,14 @@ Backnend work. Writing unit and integration tests for the backend. Implementing 
     - to run our tests using a database that is installed and running on the developer's local machine. The optimal solution would be to have every test execution use a separate database. This is "relatively simple" to achieve by running Mongo in-memory or by using Docker containers.
 
   - **supertest**
-    - [package](https://github.com/ladjs/supertest) to help us write our tests for testing the API.
+    - [package](https://github.com/ladjs/supertest) to help us write our tests for testing the API. `npm i -D supertest`
       - `model_api.test.js`: imports the Express application from the app.js module and wraps it with the supertest function into a so-called **superagent** object. This object is assigned to the api variable and tests can use it for making HTTP requests to the backend.
+      ```
+      const supertest = require("supertest");
+      const app = require("../app");
+
+      const api = supertest(app); 
+      ```
         - `.expeted('Content-Type', /application\/json/)` -> defined as regular expression 
           - ≠ to exact string because we want to omit other info on the string.
           - starts and ends with a slash /

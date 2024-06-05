@@ -1,0 +1,75 @@
+const { test, describe, beforeEach, after, before } = require("node:test");
+const supertest = require("supertest");
+const assert = require("assert");
+const app = require("../app");
+const { connect, disconnect } = require("./mongodb.memory.test.helper");
+const Blog = require("../models/blog");
+
+const api = supertest(app);
+
+const initialBlogs = [
+  {
+    title: "Yorkie Passion",
+    author: "Mary & bombon",
+    url: "https://www.yorkiepassion.com/",
+    likes: 150,
+    id: "665889a7c4d0f10fb3ac9ddc",
+  },
+  {
+    title: "Nature World News",
+    author: "Mr big Dog",
+    url: "https://www.natureworldnews.com/animals/",
+    likes: 37,
+    id: "66588adcc4d0f10fb3ac9de0",
+  },
+  {
+    title: "Wild Hearted",
+    author: "Annastasia",
+    url: "https://wild-hearted.com/",
+    likes: 93,
+    id: "66588affc4d0f10fb3ac9de2",
+  },
+  {
+    title: "World Animal Protection Blog",
+    author: "WAP ORG",
+    url: "https://www.worldanimalprotection.org/latest/blogs/",
+    likes: 103,
+    id: "665893ddfa789fed9ac6e7e3",
+  },
+  {
+    title: "Another fantastic Animals Blog!",
+    author: "Anonnimus",
+    url: "https://www.anotherfantasticanimalblog.com/",
+    likes: 198,
+    id: "6658985d9a2b944a46996200",
+  },
+];
+
+describe("/api/blogs tests", () => {
+  before(async () => {
+    await connect();
+  });
+
+  beforeEach(async () => {
+    await Blog.deleteMany({});
+    console.log("Data Cleared");
+    await Blog.insertMany(initialBlogs);
+    console.log("DB Repopulated");
+  });
+
+  after(async () => {
+    await disconnect();
+  });
+
+  test("Blogs are returned as json", async () => {
+    await api
+      .get("/api/blogs")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
+
+  test("There are 5 posted blogs", async () => {
+    const response = await api.get("/api/blogs");
+    assert.strictEqual(response.body.length, initialBlogs.length);
+  });
+});
