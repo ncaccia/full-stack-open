@@ -14,12 +14,23 @@ blogsRouter.post("/", async (req, res, next) => {
   if (!blog.likes) {
     blog.likes = 0;
   }
-  try {
-    const savedBlog = await blog.save();
-    res.status(201).json(savedBlog);
-  } catch (error) {
-    next(error);
-  }
+  const savedBlog = await blog.save();
+  res.status(201).json(savedBlog);
+});
+
+blogsRouter.put("/:id", async (req, res, next) => {
+  const { likes } = req.body;
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    req.params.id,
+    { likes }, // Update only the likes property as request on the 4.14 exercise
+    { new: true }
+  );
+  res.status(200).json(updatedBlog);
+});
+
+blogsRouter.delete("/:id", async (req, res, next) => {
+  await Blog.findByIdAndDelete(req.params.id);
+  res.status(204).end();
 });
 
 module.exports = blogsRouter;

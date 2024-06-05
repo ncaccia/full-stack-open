@@ -106,10 +106,7 @@ describe("/api/blogs tests", () => {
       url: "http://testblog.com",
     };
 
-    await api
-    .post("/api/blogs")
-    .send(newBlog)
-    .expect(400);
+    await api.post("/api/blogs").send(newBlog).expect(400);
   });
 
   test("If the url property is missing from the request, respond with 400 Bad Request", async () => {
@@ -119,5 +116,41 @@ describe("/api/blogs tests", () => {
     };
 
     await api.post("/api/blogs").send(newBlog).expect(400);
+  });
+
+  test("A blog can be deleted", async () => {
+    const blogsAtStart = await Blog.find({});
+    const blogToDelete = blogsAtStart[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const blogsAtEnd = await Blog.find({});
+    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1);
+
+    const ids = blogsAtEnd.map((b) => b.id);
+    assert.ok(!ids.includes(blogToDelete.id));
+  });
+
+  test("A blog likes can be updated", async () => {
+    const blogsAtStart = await Blog.find({});
+    const blogToUpdate = blogsAtStart[0];
+
+    const updatedBlogData = {
+      title: "Updated Title",
+      author: "Updated Author",
+      url: "http://updatedurl.com",
+      likes: 193,
+    };
+
+    const res = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlogData)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    assert.strictEqual(res.body.likes, updatedBlogData.likes);
+
+    const updatedBlogInDb = await Blog.findById(blogToUpdate.id);
+    assert.strictEqual(updatedBlogInDb.likes, updatedBlogData.likes);
   });
 });

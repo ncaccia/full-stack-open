@@ -977,7 +977,7 @@ Theo - t3․gg [Most important tests rule](https://www.youtube.com/watch?v=FF50H
   - Error handling and async/await
     - To avoid ending up with an unhandled promise rejection, we use try/catch mechanism.
 
-  - Eliminating the try-catch
+  - **Eliminating the try-catch**
     - When using async/await functions, all of the route handlers follow the same structure
         ```
         try {
@@ -989,6 +989,8 @@ Theo - t3․gg [Most important tests rule](https://www.youtube.com/watch?v=FF50H
     -  The [express-async-errors](https://github.com/davidbanham/express-async-errors) library has a solution for this.
        -  introduce the library in app.js, **before** you import your routes: `require('express-async-errors')`. The library allows us to **eliminate the try-catch blocks** completely. 
        -  The library handles everything under the hood. If an exception occurs in an async route, the execution is automatically passed to the error-handling middleware.
+          -  We need to require it on the `app.js` -> `require("express-async-errors");`
+       -  IMPORTANT: using the express-async-errors library, you don't necessarily need to create custom error handling middleware. This library automatically catches errors that occur in your asynchronous route handlers and forwards them to Express's built-in error handling middleware. However, if you want to provide custom error handling behavior, you can still create your own error handling middleware.
 
   - Optimizing the `beforeEach` function
     - Better way of saving multiple objects to the database:
@@ -1018,10 +1020,8 @@ Theo - t3․gg [Most important tests rule](https://www.youtube.com/watch?v=FF50H
           ```
 
   - Learnings from Exercises 4.8.-4.12.
-    -
 
   - Refactoring tests Exercises 4.13.-4.14.
-    -
     
 
 - #### User administration
