@@ -82,4 +82,21 @@ describe("/api/blogs tests", () => {
       assert.strictEqual(blog._id, undefined);
     });
   });
+
+  test("If the likes property is missing from the request, it defaults to 0", async () => {
+    const newBlog = {
+      title: "Test Blog",
+      author: "Test Author",
+      url: "http://testblog.com",
+    };
+
+    const response = await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const savedBlog = await Blog.findById(response.body.id);
+    assert.strictEqual(savedBlog.likes, 0);
+  });
 });
